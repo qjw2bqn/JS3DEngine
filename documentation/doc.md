@@ -34,5 +34,5 @@ material: THREE.Material
 position: engine.Vector3  
 model:THREE.Mesh, optional model for the character
 ## World
-engine.World(gravity):this
+engine.World(gravity):this  
 gravity:engine.Vector3(), if not set, defaults to engine.Vector3(0,-9.8,0)

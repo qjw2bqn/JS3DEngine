@@ -84,10 +84,12 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed){
     return this;
 }
 JS3D.prototype.Vector3 = function(x,y,z){
-    return {
-        three:new THREE.Vector3(x||0,y||0,z||0),
-        cannon:new CANNON.Vec3(x||0,y||0,z||0)
-    }
+    this.x = x||0;
+    this.y = y||0;
+    this.z = z||0;
+    this.three = new THREE.Vector3(x,y,z);
+    this.cannon = new CANNON.Vec3(x,y,z);
+    return this;
 }
 JS3D.prototype.BoxBody = function(geometry,material,mass,position){
     geometry = geometry||new THREE.BoxBufferGeometry();

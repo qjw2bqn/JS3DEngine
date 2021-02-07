@@ -34,7 +34,7 @@ world.add(sphere);
 ```
 currently these are the only bodies, but I will update it such that there are more body types to choose from
 ## will this take away any functionality from cannon.js or three.js?
-No. you cen get all of the world related things from the base engine by just doing engine.something
+No. you can get all of the world related things from the base engine by just doing engine.something
 ```javascript
 engine.camera //camera
 engine.renderer //renderer

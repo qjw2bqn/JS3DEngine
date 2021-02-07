@@ -17,11 +17,11 @@ material: THREE material
 mass: Number, if not set, defaults to 0  
 position: engine.Vector3, if not set, defaults to a blank engine.Vector3
 ## Cylinder Body
-engine.CylinderBody(geometry,material,mass,position): {mesh:THREE.Mesh,physicsBody:CANNON.Body}
-geometry: THREE.CylinderGeometry or THREE.CylinderBufferGeometry
-material: THREE.Material
-mass: Number, if not set, defaults to 0,
-position: engine.Vector3, if not set, defaults to a blank engine.Vector3();
+engine.CylinderBody(geometry,material,mass,position): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
+geometry: THREE.CylinderGeometry or THREE.CylinderBufferGeometry  
+material: THREE.Material  
+mass: Number, if not set, defaults to 0,  
+position: engine.Vector3, if not set, defaults to a blank engine.Vector3();  
 ## Character Controller
 engine.CharacterController(character,camera, moveSpeed, fixedCam): this  
 character: engine.Character  

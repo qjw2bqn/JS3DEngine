@@ -7,7 +7,7 @@ You need to have three.js and cannon.js already in your code when starting the w
 <script src='path-to-cannonjs/cannon.js'></script>
 <script src='path-to-JS3D/JS3D.js'></script>
 ```
-and you have all the libraries you need, extra ones can be added extremely easily.
+and you have all the libraries you need, extra ones can be added extremely easily, as shown in the examples folder.
 ```javascript
 var engine  = new JS3D();
 engine.init();

@@ -84,13 +84,13 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed){
     return this;
 }
 JS3D.prototype.Vector3 = function(x,y,z){
-    
     return {
         three:new THREE.Vector3(x||0,y||0,z||0),
         cannon:new CANNON.Vec3(x||0,y||0,z||0)
     }
 }
 JS3D.prototype.BoxBody = function(geometry,material,mass,position){
+    geometry = geometry||new THREE.BoxBufferGeometry();
     var geo = {
         width:geometry.parameters.width,
         height:geometry.parameters.height,
@@ -113,9 +113,12 @@ JS3D.prototype.BoxBody = function(geometry,material,mass,position){
     }
 }
 JS3D.prototype.SphereBody = function(geometry,material,mass,position){
+    geometry = geometry||new THREE.SphereBufferGeometry();
     var geo = {
         radius:geometry.parameters.radius
     }
+    mass = mass||0;
+    position = position||this.Vector3();
     var mesh = new THREE.Mesh(geometry,material);
     this.scene.add(mesh);
     mesh.position.copy(position.three);
@@ -131,14 +134,11 @@ JS3D.prototype.SphereBody = function(geometry,material,mass,position){
         physicsBody:physicsBody
     }
 }
-JS3D.prototype.Character = function(width,height,depth,material,model,position){
+JS3D.prototype.Character = function(width,height,depth,material,position,model){
     var geo = new THREE.BoxBufferGeometry(width,height,depth);
-    var mat = material;
+    material = material||new THREE.MeshBasicMaterial();
     position = position||this.Vector3();
-    if(material==undefined){
-        mat = new THREE.MeshBasicMaterial({color:0xffffff});
-    }
-    var mesh = new THREE.Mesh(geo,mat);
+    var mesh = new THREE.Mesh(geo,material);
     mesh.position.copy(position.three);
     if(model!=undefined){
         mesh = model;

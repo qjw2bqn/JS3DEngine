@@ -34,8 +34,9 @@ JS3D.prototype.World = function(gravity){
     }
     return this;
 }
-JS3D.prototype.CharacterController = function(character,camera,moveSpeed){
+JS3D.prototype.CharacterController = function(character,camera,moveSpeed, fixedCam){
     var physicsBody = character.physicsBody;
+    fixedCam = fixedCam||false;
     var mesh = character.mesh;
     this.moveDir = {
         forward:false,
@@ -49,7 +50,9 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed){
         this.camDir.normalize();
         physicsBody.position.x+= this.camDir.x*moveSpeed;
         physicsBody.position.z+= this.camDir.z*moveSpeed;
-        camera.position.addScaledVector(this.camDir,moveSpeed);
+        if(!fixedCam){
+            camera.position.addScaledVector(this.camDir,moveSpeed);
+        }
         mesh.position.copy(physicsBody.position);
     };
     this.backward = function(){
@@ -58,7 +61,9 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed){
         this.camDir.normalize();
         physicsBody.position.x+= this.camDir.x*-moveSpeed;
         physicsBody.position.z+= this.camDir.z*-moveSpeed;
-        camera.position.addScaledVector(this.camDir,-moveSpeed);
+        if(!fixedCam){
+            camera.position.addScaledVector(this.camDir,-moveSpeed);
+        }
         mesh.position.copy(physicsBody.position);
     }
     this.left = function(){
@@ -68,7 +73,9 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed){
         this.camDir.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2);
         physicsBody.position.x+= this.camDir.x*moveSpeed;
         physicsBody.position.z+= this.camDir.z*moveSpeed;
-        camera.position.addScaledVector(this.camDir,moveSpeed);
+        if(!fixedCam){
+            camera.position.addScaledVector(this.camDir,moveSpeed);
+        }
         mesh.position.copy(physicsBody.position)
     }
     this.right = function(){
@@ -78,7 +85,9 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed){
         this.camDir.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2);
         physicsBody.position.x+= this.camDir.x*-moveSpeed;
         physicsBody.position.z+= this.camDir.z*-moveSpeed;
-        camera.position.addScaledVector(this.camDir,-moveSpeed);
+        if(!fixedCam){
+            camera.position.addScaledVector(this.camDir,moveSpeed);
+        }
         mesh.position.copy(physicsBody.position)
     }
     return this;
@@ -135,6 +144,28 @@ JS3D.prototype.SphereBody = function(geometry,material,mass,position){
         mesh:mesh,
         physicsBody:physicsBody
     }
+}
+JS3D.prototype.CylinderBody = function(geometry,material,mass,position){
+  position = position||engine.Vector3();
+  geometry = geometry|| new THREE.CylinderBufferGeometry();
+  mass = mass||0;
+  material = material||new THREE.MeshBasicMaterial();
+  var geo = {
+    height:geometry.parameters.height,
+    radTop:geometry.parameters.radiusTop,
+    radBot:geometry.parameters.radiusBottom,
+    numSegs:geometry.parameters.radialSegments,
+  }
+  var mesh = new THREE.Mesh(geo,material);
+  var body = new CANNON.Body({
+  shape:new CANNON.Cylinder(geo.radTop,geo.radBot,geo.height,geo.numSegs),
+  mass:mass,
+  position:position.cannon
+  });
+  return {
+    mesh:mesh,
+    physicsBody:body
+  }
 }
 JS3D.prototype.Character = function(width,height,depth,material,position,model){
     var geo = new THREE.BoxBufferGeometry(width,height,depth);

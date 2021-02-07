@@ -42,4 +42,4 @@ engine.renderer //renderer
 ```
 or if you just want to get the three portion of a body, you can do body.mesh. if you want the cannon portion it is body.physicsBody.
 ## Special Thanks
-I would like to give special thanks to @mrdoob for three js and @schteppe for two amazing libraries that allowed me to create this, three.js and cannon.js, respectively
+I would like to give special thanks to @mrdoob and @schteppe for two amazing libraries that allowed me to create this, three.js and cannon.js, respectively

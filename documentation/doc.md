@@ -33,6 +33,7 @@ forward(): moves the character forward with respect to the camera
 backward(): moves the character backward with respect to the camera  
 left(): moves the character left with respect to the camera  
 right(): moves the character right with respect to the camera  
+jump(jumpVelocity): null, jumpVelocity: Number  
 moveDir: {left:boolean, right:boolean, forward:boolean, backward:boolean}
 ## character
 engine.Character(width,height,depth,material,position,model):{mesh:THREE.Mesh,physicsBody:CANNON.Body}  

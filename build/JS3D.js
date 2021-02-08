@@ -86,7 +86,7 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed, fixedC
         physicsBody.position.x+= this.camDir.x*-moveSpeed;
         physicsBody.position.z+= this.camDir.z*-moveSpeed;
         if(!fixedCam){
-            camera.position.addScaledVector(this.camDir,moveSpeed);
+            camera.position.addScaledVector(this.camDir,-moveSpeed);
         }
         mesh.position.copy(physicsBody.position)
     }

@@ -11,7 +11,7 @@ material: THREE material
 mass: Number, if not put in will default to 0  
 position: engine.Vector3, if not set, defaults to a blank engine.Vector3
 ## Sphere Body
-engine.SphereBody(geometry,material,mass,position): {mesh:THREE.Mesh,physicsBody:CANNON.Body}
+engine.SphereBody(geometry,material,mass,position): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
 geometry: THREE.SphereGeometry or THREE.SphereBufferGeometry  
 material: THREE material  
 mass: Number, if not set, defaults to 0  

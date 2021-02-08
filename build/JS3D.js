@@ -90,6 +90,9 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed, fixedC
         }
         mesh.position.copy(physicsBody.position)
     }
+    this.jump = function(jumpVelocity){
+        physicsBody.velocity.y = jumpVelocity||1;
+    }
     return this;
 }
 JS3D.prototype.Vector3 = function(x,y,z){

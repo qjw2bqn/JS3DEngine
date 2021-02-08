@@ -44,6 +44,6 @@ model:THREE.Mesh, optional model for the character
 engine.World(gravity):this  
 gravity:engine.Vector3(), if not set, defaults to engine.Vector3(0,-9.8,0)
 ### returned items
-add(body:engine.ShapeBody): null, adds body to the world
+add(body:engine.ShapeBody): null, adds body to the world  
 update(): null, updates the world and renders
 

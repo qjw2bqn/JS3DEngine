@@ -10,17 +10,15 @@
   
   </body>
   <script>
-  var engine = new JS3D();
-  engine.init();
-  var world = engine.World();
-  var box = engine.BoxBody(new THREE.BoxBufferGeometry(),new THREE.MeshPhongMaterial(),1,engine.Vector3(0,5,0));
-  var ground = engine.BoxBody(new THREE.BoxBufferGeometry(100,2,100),new THREE.MeshPhongMaterial(),0,engine.Vector3(0,-1,0));
+  var world = new JS3D().World();
+  var box = new JS3D().BoxBody(new THREE.BoxBufferGeometry(),new THREE.MeshPhongMaterial(),1,new JS3D().Vector3(0,5,0));
+  var ground = new JS3D().BoxBody(new THREE.BoxBufferGeometry(100,2,100),new THREE.MeshPhongMaterial(),0,new JS3D().Vector3(0,-1,0));
   world.add(box);
   world.add(ground);
   var light = new THREE.DirectionalLight();
   light.position.set(10,5,10);
-  engine.scene.add(light);
-  var controls = new THREE.OrbitControls(engine.camera,engine.renderer.domElement);
+  world.scene.add(light);
+  var controls = new THREE.OrbitControls(world.camera,world.renderer.domElement);
   var animate = function(){
     requestAnimationFrame(animate);
     world.update();

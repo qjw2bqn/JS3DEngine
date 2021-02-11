@@ -1,29 +1,23 @@
 var JS3D = function(){
-    this.camera;
-    this.scene;
-    this.world;
-    this.renderer;
-    this.bodies = [];
-    this.camDir = new THREE.Vector3();
+
 }
-JS3D.prototype.init = function(){
+JS3D.prototype.World = function(gravity){
+    gravity = gravity||this.Vector3(0,-9.8,0);
     this.camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
     this.scene = new THREE.Scene();
-    this.world = new CANNON.World();
+    this.cWorld = new CANNON.World();
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth,window.innerHeight);
     document.body.appendChild(this.renderer.domElement);
-}
-JS3D.prototype.World = function(gravity){
-    this.gravity = gravity||this.Vector3(0,-9.8,0);
-    this.world.gravity.copy(this.gravity.cannon);
+    this.bodies = [];
+    this.cWorld.gravity.copy(gravity.cannon);
     this.add = function(body){
-        this.world.addBody(body.physicsBody);
+        this.cWorld.addBody(body.physicsBody);
         this.scene.add(body.mesh);
         this.bodies.push(body);
     }
     this.update = function(){
-        this.world.step(1/60);
+        this.cWorld.step(1/60);
         this.renderer.render(this.scene,this.camera);
         for(var x in this.bodies){
             var cannonObj = this.bodies[x].physicsBody;
@@ -38,6 +32,7 @@ JS3D.prototype.CharacterController = function(character,camera,moveSpeed, fixedC
     var physicsBody = character.physicsBody;
     fixedCam = fixedCam||false;
     var mesh = character.mesh;
+    this.camDir = new THREE.Vector3();
     this.moveDir = {
         forward:false,
         backward:false,

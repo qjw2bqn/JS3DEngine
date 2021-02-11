@@ -1,4 +1,8 @@
 # Documentation
+## init
+engine.init(): null  
+initiates the engine  
+required after creating the engine
 ## Vector3
 engine.Vector3(x,y,z): {three:THREE.Vector3(),cannon:CANNON.Vec3()}  
 x: Number, if not set, defaults to 0  

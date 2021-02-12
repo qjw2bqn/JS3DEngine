@@ -14,7 +14,6 @@
   world.camera.position.set(0,5,10);
   world.camera.lookAt(world.scene.position);
   var ground = new JS3D().BoxBody(new THREE.BoxBufferGeometry(100,2,100),new THREE.MeshPhongMaterial(),0,new JS3D().Vector3(0,-1,0));
-  world.add(box);
   world.add(ground);
   var light = new THREE.DirectionalLight();
   light.position.set(10,5,10);

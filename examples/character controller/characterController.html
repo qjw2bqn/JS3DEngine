@@ -22,6 +22,8 @@
   world.scene.add(light);
   var controls = new THREE.OrbitControls(world.camera,world.renderer.domElement);
   var player = new JS3D().Character(1,2,1,new THREE.MeshPhongMaterial(),new JS3D().Vector3(0,5,0));
+  controls.target = player.mesh;
+  world.add(player);
   var characterController = new JS3D().CharacterController(player,world.camera,1/7.5);
   var move = characterController.moveDir;
   document.onkeydown = function(){

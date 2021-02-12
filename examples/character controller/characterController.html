@@ -11,7 +11,7 @@
   </body>
   <script>
   var world = new JS3D().World();
-  world.camera.position.set(0,10,5);
+  world.camera.position.set(0,5,10);
   world.camera.lookAt(world.scene.position);
   var ground = new JS3D().BoxBody(new THREE.BoxBufferGeometry(100,2,100),new THREE.MeshPhongMaterial(),0,new JS3D().Vector3(0,-1,0));
   world.add(box);

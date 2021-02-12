@@ -9,9 +9,7 @@ You need to have three.js and cannon.js already in your code when starting the w
 ```
 and you have all the libraries you need, extra ones can be added extremely easily, as shown in the examples folder.
 ```javascript
-var engine  = new JS3D();
-engine.init();
-var world = engine.World();
+var world = new JS3D().World();
 var animate = function(){
   requestAnimationFrame(animate);
   world.update();
@@ -24,20 +22,20 @@ JS3D uses three.js geometries to create the physics bodies, but there are specia
 like adding a box
 ```javascript
 //assuming having the code above and putting this before the animate function
-var box = engine.BoxBody(new THREE.BoxBufferGeometry(1,5,3),new THREE.MeshBasicMaterial(),1,engine.Vector3(0,5,0));
+var box = new JS3D().BoxBody(new THREE.BoxBufferGeometry(1,5,3),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
 world.add(box);
 ```
 A sphere is the same thing, except you replace the BoxBody with SphereBody, and you replace the geometry
 ```javascript
-var sphere = engine.SphereBody(new THREE.SphereBufferGeometry(1),new THREE.MeshBasicMaterial(),1,engine.Vector3(0,5,0));
+var sphere = JS3D().SphereBody(new THREE.SphereBufferGeometry(1),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
 world.add(sphere);
 ```
 currently these are the only bodies, but I will update it such that there are more body types to choose from
 ## will this take away any functionality from cannon.js or three.js?
-No. you can get all of the world related things from the base engine by just doing engine.something
+No. you can get all of the world related things from the base engine by just doing world.something
 ```javascript
-engine.camera //camera
-engine.renderer //renderer
+world.camera //camera
+world.renderer //renderer
 ...
 ```
 or if you just want to get the three portion of a body, you can do body.mesh. if you want the cannon portion it is body.physicsBody.

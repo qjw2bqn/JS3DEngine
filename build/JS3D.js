@@ -3,7 +3,8 @@ var JS3D = function(){
 }
 JS3D.prototype.World = function(gravity){
     gravity = gravity||this.Vector3(0,-9.8,0);
-    this.camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+    var veiw = 0;
+    this.cameras = [new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)];
     this.scene = new THREE.Scene();
     this.cWorld = new CANNON.World();
     this.renderer = new THREE.WebGLRenderer();
@@ -18,13 +19,28 @@ JS3D.prototype.World = function(gravity){
     }
     this.update = function(){
         this.cWorld.step(1/60);
-        this.renderer.render(this.scene,this.camera);
+        this.renderer.render(this.scene,this.cameras[veiw]);
         for(var x in this.bodies){
             var cannonObj = this.bodies[x].physicsBody;
             var threeObj = this.bodies[x].mesh;
             threeObj.position.copy(cannonObj.position);
             threeObj.quaternion.copy(cannonObj.quaternion);
         }
+    }
+    this.addCamera = function(camera){
+        this.cameras.push(camera);
+    }
+    this.setVeiwMode = function(mode){
+        if(mode<0){
+            console.warn('Camera veiw mode is less than zero. Setting to zero')
+            veiw = 0;
+        }else if(mode>this.cameras.length-1){
+            console.warn('Camera veiw mode is higher than the number of cameras that there are. setting to the number of cameras');
+            veiw = this.cameras.length-1;
+        }else{
+            veiw = mode-1;
+        }
+        
     }
     return this;
 }

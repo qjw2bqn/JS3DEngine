@@ -35,7 +35,7 @@
                 gravity: JS3D.Vector3()<br>
                 <h3>Returned Items</h3>
                 scene: THREE.Scene<br>
-                camera: THREE.PerspectiveCamera<br>
+                cameras: [THREE.PerspectiveCamera]<br>
                 renderer: THREE.WebGLRenderer<br>
                 cWorld: CANNON.World<br>
                 bodies: Array of all bodies added to the World<br>
@@ -62,7 +62,7 @@
                 Position: JS3D.Vector3();
         </div>
         <div id='CylinderBody'>
-                <h2>Box Body</h2>
+                <h2>Cylinder Body</h2>
                 new JS3D.BoxBody(geometry,material,mass,position): {mesh: THREE.Mesh,physicsBody:CANNON.Body}<br>
                 geometry: THREE.CylinderGeometry or THREE.CylinderBufferGeometry<br>
                 material: THREE.MeshBasicMaterial<br>

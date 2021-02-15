@@ -1,8 +1,4 @@
 # Documentation
-## init
-engine.init(): null  
-initiates the engine  
-required after creating the engine
 ## Vector3
 engine.Vector3(x,y,z): {three:THREE.Vector3(),cannon:CANNON.Vec3()}  
 x: Number, if not set, defaults to 0  
@@ -46,9 +42,12 @@ material: THREE.Material
 position: engine.Vector3  
 model:THREE.Mesh, optional model for the character
 ## World
-engine.World(gravity):this  
+engine.World(target,gravity):this  
+target: HTMLDOMElement, place where this will be placed, defaults to document.body  
 gravity:engine.Vector3(), if not set, defaults to engine.Vector3(0,-9.8,0)
 ### returned items
 add(body:engine.ShapeBody): null, adds body to the world  
-update(): null, updates the world and renders
+update(): null, updates the world and renders  
+addCamera(camera: THREE.Camera):null, add another camera for extra rendering options  
+setVeiwMode(mode: Number):null, switch which camera is to be used for rendering the scene
 

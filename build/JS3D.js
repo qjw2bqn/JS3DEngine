@@ -11,8 +11,8 @@ JS3D.prototype.World = function(target,gravity){
       width = window.innerWidth;
       height = window.innerHeight;
     }else{
-      width = target.innerWidth;
-      height = target.innerHeight;
+      width = target.clientWidth;
+      height = target.clientWidth;
     }
     this.cameras = [new THREE.PerspectiveCamera(75,width/height,0.1,1000)];
     this.scene = new THREE.Scene();

@@ -38,8 +38,11 @@
                 renderer: THREE.WebGLRenderer<br>
                 cWorld: CANNON.World<br>
                 bodies: Array of all bodies added to the World<br>
-                add(body): body: JS3D.ShapeMesh()<br>
-                update():null
+                add(body: JS3D.ShapeBody): null<br>
+                update():null<br>
+                addCamera(camera: THREE.Camera): null, adds a camera to the scene<br>
+                setVeiwMode(mode: Number):null, sets which camera to use for rendering
+                
             </div>
         <div id='BoxBody'>
             <h2>Box Body</h2>
@@ -88,7 +91,7 @@
             right()<br>
             forward()<br>
             back()<br>
-            jump(jumpVelocity): jumpVelocity: Number<br>
+            jump(jumpVelocity: Number): null<br>
             moveDir:{left:Boolean,right:Boolean,backward:Boolean,forward:Boolean}
         </div>
     </body>

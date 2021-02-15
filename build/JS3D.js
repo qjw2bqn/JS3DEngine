@@ -1,15 +1,25 @@
 var JS3D = function(){
 
 }
-JS3D.prototype.World = function(gravity){
+JS3D.prototype.World = function(target,gravity){
     gravity = gravity||this.Vector3(0,-9.8,0);
+    target = target||document.body;
     var veiw = 0;
-    this.cameras = [new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)];
+    var width = 0;
+    var height = 0;
+    if(target==document.body){
+      width = window.innerWidth;
+      height = window.innerHeight;
+    }else{
+      width = target.innerWidth;
+      height = target.innerHeight;
+    }
+    this.cameras = [new THREE.PerspectiveCamera(75,width/height,0.1,1000)];
     this.scene = new THREE.Scene();
     this.cWorld = new CANNON.World();
     this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth,window.innerHeight);
-    document.body.appendChild(this.renderer.domElement);
+    this.renderer.setSize(width,height);
+    target.appendChild(this.renderer.domElement);
     this.bodies = [];
     this.cWorld.gravity.copy(gravity.cannon);
     this.add = function(body){

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JS3D Home Page</title>
+        <style>
+        .content_img{
+            position: relative;
+            margin:3px;
+            display: inline;
+        }
+        .content_img div{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: black;
+            color: white;
+            margin-bottom: 5px;
+            font-family: sans-serif;
+            opacity: 0;
+            visibility: hidden;
+            -webkit-transition: visibility 0s, opacity 0.5s linear; 
+            transition: visibility 0s, opacity 0.5s linear;
+        }
+        .content_img:hover div{
+            padding: 8px 15px;
+            visibility: visible;
+            opacity: 0.7; 
+        }
+        </style>
+    </head>
+    <body>
+        <h1>JS3D</h1>
+        <p>JS3D is a 3D game engine made with three.js and cannon.js.</p>
+        <h2>Examples</h2>
+        <div class='content_img'>
+        <a href='./examples/adding/lights.html' target='_blank'>
+        <img src='./images/lights.png' width='175'/>
+        </a>
+        <div>Adding Lights</div>
+        </div>
+        <div class='content_img'>
+        <a href='./examples/adding/libraries.html' target='_blank'>
+            <img src='./images/libraries.png' width='175'/>
+        </a>
+        <div>Adding Libraries</div>
+        </div>
+        <div class='content_img'>
+        <a href='./examples/characterController/CharacterController.html' target='_blank'>
+            <img src='./images/characterController.png' width='175'/>
+        </a>
+        <div>Character Controller</div>
+        </div>
+        <div class='content_img'>
+        <a href='./examples/setup/setup.html' target='_blank'>
+            <img src='./images/setup.png' width='175'/>
+        </a>
+        <div>Setup</div>
+        </div>
+        <h2>Other stuff</h2>
+        <p>
+            <a href='./documentation/documentation.html' target='_blank'>Documentation</a><br>
+            <a href='github.com/Dannie226/JS3DEngine' target='_blank'>Github</a><br>
+            <a href='./build/JS3D.js'>Engine js file</a>
+            <h3>Other libraries</h3>
+            <div>
+                <a href='https://threejs.org' target='_blank'>Three js</a><br>
+                <a href='https://schteppe.github.io/cannon.js/' target='_blank'>Cannon js</a>
+            </div>
+        </p>
+
+    </body>
+</html>

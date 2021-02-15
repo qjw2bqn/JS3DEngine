@@ -30,7 +30,7 @@ A sphere is the same thing, except you replace the BoxBody with SphereBody, and 
 var sphere = JS3D().SphereBody(new THREE.SphereBufferGeometry(1),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
 world.add(sphere);
 ```
-currently these are the only bodies, but I will update it such that there are more body types to choose from
+There is also a CylinderBody, but its the same story
 ## will this take away any functionality from cannon.js or three.js?
 No. you can get all of the world related things from the base engine by just doing world.something
 ```javascript

@@ -19,6 +19,10 @@
   world.add(box);
   world.add(ground);
   var controls = new THREE.OrbitControls(world.cameras[0],world.renderer.domElement);
+  var light = new THREE.DirectionalLight();
+  light.position.set( -1, 1.75, 1 );
+  light.position.multiplyScalar( 100 );
+  world.scene.add(light);
   var animate = function(){
     requestAnimationFrame(animate);
     world.update();

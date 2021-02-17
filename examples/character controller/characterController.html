@@ -15,12 +15,16 @@
   world.cameras[0].position.set(0,5,10);
   world.cameras[0].lookAt(world.scene.position);
   var ground = new JS3D().BoxBody(new THREE.BoxBufferGeometry(100,2,100),new THREE.MeshPhongMaterial(),0,new JS3D().Vector3(0,-1,0));
+  ground.mesh.recieveShadow = true;
   world.add(ground);
+  world.renderer.shadowMap.enabled = true;
   var light = new THREE.DirectionalLight();
-  light.position.set(10,5,10);
-  world.scene.add(light);
+  light.castShadow = true;
+  light.position.set( -1, 1.75, 1 );
+  light.position.multiplyScalar( 100 );
   var controls = new THREE.OrbitControls(world.cameras[0],world.renderer.domElement);
   var player = new JS3D().Character(1,2,1,new THREE.MeshPhongMaterial(),new JS3D().Vector3(0,5,0));
+  player.mesh.castShadow = true;
   controls.target = player.mesh.position;
   world.add(player);
   var characterController = new JS3D().CharacterController(player,world.cameras[0],1/7.5);

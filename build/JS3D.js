@@ -39,7 +39,7 @@ Vector3.prototype.setZ = function(z){
     this.three.z = z;
 }
 var World = function(target,gravity){
-    this.gravity = gravity||new Vector3D(0,-9.8,0);
+    this.gravity = gravity||new Vector3(0,-9.8,0);
     this.target = target||document.body;
     this.veiw = 0;
     var width = 0;
@@ -240,7 +240,7 @@ var Character = function(width,height,depth,material,position,model){
 }
 
 JS3D.World = World;
-JS3D.Vector3D = Vector3D;
+JS3D.Vector3 = Vector3;
 JS3D.CharacterController = CharacterController;
 JS3D.BoxBody = BoxBody;
 JS3D.SphereBody = BoxBody;

@@ -1,215 +1,249 @@
-var JS3D = function(){
+var JS3D = {
 
 }
-JS3D.prototype.World = function(target,gravity){
-    gravity = gravity||this.Vector3(0,-9.8,0);
-    target = target||document.body;
-    var veiw = 0;
+var Vector3D = function(x,y,z){
+    this.x = x||0;
+    this.y = y||0;
+    this.z = z||0;
+    this.cannon = new CANNON.Vec3(this.x,this.y,this.z);
+    this.three = new THREE.Vector3(this.x,this.y,this.z);
+    return this;
+}
+Vector3D.prototype.copy = function(v){
+    this.cannon.copy(v.three);
+    this.three.copy(v.cannon);
+    this.x = v.x;
+    this.y = v.y;
+    this.z = v.z;
+}
+Vector3D.prototype.set = function(x,y,z){
+    this.cannon.set(x,y,z);
+    this.three.set(x,y,z);
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
+Vector3D.prototype.setX = function(x){
+    this.x = x;
+    this.cannon.x = x;
+    this.three.x = x;
+}
+Vector3D.prototype.setY = function(y){
+    this.y = y;
+    this.cannon.y = y;
+    this.three.y = y;
+}
+Vector3D.prototype.setZ = function(z){
+    this.z = z;
+    this.cannon.z = z;
+    this.three.z = z;
+}
+var World = function(target,gravity){
+    this.gravity = gravity||new Vector3D(0,-9.8,0);
+    this.target = target||document.body;
+    this.veiw = 0;
     var width = 0;
     var height = 0;
-    if(target==document.body){
+    if(this.target==document.body){
       width = window.innerWidth;
       height = window.innerHeight;
     }else{
       width = target.clientWidth;
-      height = target.clientWidth;
+      height = target.clientHeight;
     }
     this.cameras = [new THREE.PerspectiveCamera(75,width/height,0.1,1000)];
     this.scene = new THREE.Scene();
     this.cWorld = new CANNON.World();
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(width,height);
-    target.appendChild(this.renderer.domElement);
+    this.target.appendChild(this.renderer.domElement);
     this.bodies = [];
-    this.cWorld.gravity.copy(gravity.cannon);
-    this.add = function(body){
-        this.cWorld.addBody(body.physicsBody);
-        this.scene.add(body.mesh);
-        this.bodies.push(body);
-    }
-    this.update = function(){
-        this.cWorld.step(1/60);
-        this.renderer.render(this.scene,this.cameras[veiw]);
-        for(var x in this.bodies){
-            var cannonObj = this.bodies[x].physicsBody;
-            var threeObj = this.bodies[x].mesh;
-            threeObj.position.copy(cannonObj.position);
-            threeObj.quaternion.copy(cannonObj.quaternion);
-        }
-    }
-    this.addCamera = function(camera){
-        this.cameras.push(camera);
-    }
-    this.setVeiwMode = function(mode){
-        if(mode<0){
-            console.warn('Camera veiw mode is less than zero. Setting to zero')
-            veiw = 0;
-        }else if(mode>this.cameras.length-1){
-            console.warn('Camera veiw mode is higher than the number of cameras that there are. setting to the number of cameras');
-            veiw = this.cameras.length-1;
-        }else{
-            veiw = mode-1;
-        }
-        
-    }
-    return this;
+    this.cWorld.gravity.copy(this.gravity.cannon);
 }
-JS3D.prototype.CharacterController = function(character,camera,moveSpeed, fixedCam){
-    var physicsBody = character.physicsBody;
-    fixedCam = fixedCam||false;
-    var mesh = character.mesh;
+World.prototype.add = function(body){
+    var physBod = body.physicsBody;
+    var mesh = body.mesh;
+    this.cWorld.addBody(physBod);
+    this.scene.add(mesh);
+    this.bodies.push(body);
+}
+World.prototype.update = function(){
+    this.cWorld.step(1/60);
+    this.renderer.render(this.scene,this.cameras[this.veiw]);
+    for(var x in this.bodies){
+        var cannonObj = this.bodies[x].physicsBody;
+        var threeObj = this.bodies[x].mesh;
+        threeObj.position.copy(cannonObj.position);
+        threeObj.quaternion.copy(cannonObj.quaternion);
+    }
+}
+World.prototype.addCamera = function(camera){
+    this.cameras.push(camera);
+}
+World.prototype.setVeiwMode = function(mode){
+    if(mode<0){
+        console.warn('Camera veiw mode is less than zero. Setting to zero')
+        this.veiw = 0;
+    }else if(mode>this.cameras.length){
+        console.warn('Camera veiw mode is higher than the number of cameras that there are. setting to the number of cameras');
+        this.veiw = this.cameras.length-1;
+    }else{
+        this.veiw = mode-1;
+    }
+    
+}
+
+var CharacterController = function(character,camera,moveSpeed, fixedCam){
+    this.fixedCam = fixedCam||false;
+    this.moveSpeed = moveSpeed||1/7;
+    this.camera = camera;
+    this.character = character;
     this.camDir = new THREE.Vector3();
     this.moveDir = {
         forward:false,
         backward:false,
         left:false,
         right:false
-    }
-    this.forward = function(){
-        camera.getWorldDirection(this.camDir);
-        this.camDir.setComponent(1,0);
-        this.camDir.normalize();
-        physicsBody.position.x+= this.camDir.x*moveSpeed;
-        physicsBody.position.z+= this.camDir.z*moveSpeed;
-        if(!fixedCam){
-            camera.position.addScaledVector(this.camDir,moveSpeed);
-        }
-        mesh.position.copy(physicsBody.position);
-    };
-    this.backward = function(){
-        camera.getWorldDirection(this.camDir);
-        this.camDir.setComponent(1,0);
-        this.camDir.normalize();
-        physicsBody.position.x+= this.camDir.x*-moveSpeed;
-        physicsBody.position.z+= this.camDir.z*-moveSpeed;
-        if(!fixedCam){
-            camera.position.addScaledVector(this.camDir,-moveSpeed);
-        }
-        mesh.position.copy(physicsBody.position);
-    }
-    this.left = function(){
-        camera.getWorldDirection(this.camDir);
-        this.camDir.setComponent(1,0);
-        this.camDir.normalize();
-        this.camDir.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2);
-        physicsBody.position.x+= this.camDir.x*moveSpeed;
-        physicsBody.position.z+= this.camDir.z*moveSpeed;
-        if(!fixedCam){
-            camera.position.addScaledVector(this.camDir,moveSpeed);
-        }
-        mesh.position.copy(physicsBody.position)
-    }
-    this.right = function(){
-        camera.getWorldDirection(this.camDir);
-        this.camDir.setComponent(1,0);
-        this.camDir.normalize();
-        this.camDir.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2);
-        physicsBody.position.x+= this.camDir.x*-moveSpeed;
-        physicsBody.position.z+= this.camDir.z*-moveSpeed;
-        if(!fixedCam){
-            camera.position.addScaledVector(this.camDir,-moveSpeed);
-        }
-        mesh.position.copy(physicsBody.position)
-    }
-    this.jump = function(jumpVelocity){
-        physicsBody.velocity.y = jumpVelocity||1;
-    }
-    return this;
+    } 
 }
-JS3D.prototype.Vector3 = function(x,y,z){
-    this.x = x||0;
-    this.y = y||0;
-    this.z = z||0;
-    this.three = new THREE.Vector3(x,y,z);
-    this.cannon = new CANNON.Vec3(x,y,z);
-    return this;
+CharacterController.prototype.forward = function(){
+    var physicsBody = this.character.physicsBody;
+    var mesh = this.character.mesh;
+    this.camera.getWorldDirection(this.camDir);
+    this.camDir.setComponent(1,0);
+    this.camDir.normalize();
+    physicsBody.position.x+= this.camDir.x*this.moveSpeed;
+    physicsBody.position.z+= this.camDir.z*this.moveSpeed;
+    if(!this.fixedCam){
+        this.camera.position.addScaledVector(this.camDir,this.moveSpeed);
+    }
+    mesh.position.copy(physicsBody.position);
+};
+CharacterController.prototype.backward = function(){
+    var physicsBody = this.character.physicsBody;
+    var mesh = this.character.mesh;
+    this.camera.getWorldDirection(this.camDir);
+    this.camDir.setComponent(1,0);
+    this.camDir.normalize();
+    physicsBody.position.x+= this.camDir.x*-this.moveSpeed;
+    physicsBody.position.z+= this.camDir.z*-this.moveSpeed;
+    if(!this.fixedCam){
+        this.camera.position.addScaledVector(this.camDir,-this.moveSpeed);
+    }
+    mesh.position.copy(physicsBody.position);
 }
-JS3D.prototype.BoxBody = function(geometry,material,mass,position){
+CharacterController.prototype.left = function(){
+    var physicsBody = this.character.physicsBody;
+    var mesh = this.character.mesh;
+    this.camera.getWorldDirection(this.camDir);
+    this.camDir.setComponent(1,0);
+    this.camDir.normalize();
+    this.camDir.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2);
+    physicsBody.position.x+= this.camDir.x*this.moveSpeed;
+    physicsBody.position.z+= this.camDir.z*this.moveSpeed;
+    if(!this.fixedCam){
+        this.camera.position.addScaledVector(this.camDir,this.moveSpeed);
+    }
+    mesh.position.copy(physicsBody.position)
+}
+CharacterController.prototype.right = function(){
+    var physicsBody = this.character.physicsBody;
+    var mesh = this.character.mesh;
+    this.camera.getWorldDirection(this.camDir);
+    this.camDir.setComponent(1,0);
+    this.camDir.normalize();
+    this.camDir.applyAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2);
+    physicsBody.position.x+= this.camDir.x*-this.moveSpeed;
+    physicsBody.position.z+= this.camDir.z*-this.moveSpeed;
+    if(!this.fixedCam){
+        this.camera.position.addScaledVector(this.camDir,-this.moveSpeed);
+    }
+    mesh.position.copy(physicsBody.position)
+}
+CharacterController.prototype.jump = function(jumpVelocity){
+    this.character.physicsBody.velocity.y = jumpVelocity||1;
+}
+
+var BoxBody = function(geometry,material,mass,position){
     geometry = geometry||new THREE.BoxBufferGeometry();
-    var geo = {
-        width:geometry.parameters.width,
-        height:geometry.parameters.height,
-        depth:geometry.parameters.depth
-    }
-    position = position||this.Vector3();
+    material = material||new THREE.MeshBasicMaterial();
     mass = mass||0;
-    var mesh = new THREE.Mesh(geometry,material);
-    mesh.position.copy(position.three);
-    var shape = new CANNON.Box(new CANNON.Vec3(geo.width/2,geo.height/2,geo.depth/2));
-    var physicsBody = new CANNON.Body({
-        shape,
+    position = position||new Vector3D();
+    this.mesh = new THREE.Mesh(geometry,material);
+    this.mesh.position.copy(position.three);
+    this.physicsBodyShape = new CANNON.Box(new CANNON.Vec3(geometry.parameters.width/2,geometry.parameters.height/2,geometry.parameters.depth/2));
+    this.physicsBody = new CANNON.Body({
         mass:mass,
-        position:position.cannon
+        position:position.cannon,
+        shape:this.physicsBodyShape
     })
-    this.position = position;
-    return {
-        mesh:mesh,
-        physicsBody:physicsBody
-    }
+    return this;
 }
-JS3D.prototype.SphereBody = function(geometry,material,mass,position){
+
+var SphereBody = function(geometry,material,mass,position){
     geometry = geometry||new THREE.SphereBufferGeometry();
     var geo = {
         radius:geometry.parameters.radius
     }
     mass = mass||0;
-    position = position||this.Vector3();
-    var mesh = new THREE.Mesh(geometry,material);
-    this.scene.add(mesh);
+    position = position||new Vector3D();
+    this.mesh = new THREE.Mesh(geometry,material);
     mesh.position.copy(position.three);
-    var shape = new CANNON.Sphere(geo.radius);
-    var physicsBody = new CANNON.Body({
-        shape,
+    this.physicsBodyShape = new CANNON.Sphere(geo.radius);
+    this.physicsBody = new CANNON.Body({
+        physicsBodyShape,
         mass:mass,
         position:position.cannon
-    })
-    this.world.add(physicsBody);
-    return {
-        mesh:mesh,
-        physicsBody:physicsBody
+    });
+    return this;
+}
+
+var CylinderBody = function(geometry,material,mass,position){
+    position = position||new Vector3D();
+    geometry = geometry|| new THREE.CylinderBufferGeometry();
+    mass = mass||0;
+    material = material||new THREE.MeshBasicMaterial();
+    var geo = {
+      height:geometry.parameters.height,
+      radTop:geometry.parameters.radiusTop,
+      radBot:geometry.parameters.radiusBottom,
+      numSegs:geometry.parameters.radialSegments,
     }
+    this.mesh = new THREE.Mesh(geo,material);
+    this.mesh.position.copy(position.three);
+    this.physicsBodyShape = new CANNON.Cylinder(geo.radTop,geo.radBot,geo.height,geo.numSegs)
+    this.physicsBody = new CANNON.Body({
+    shape:this.physicsBodyShape,
+    mass:mass,
+    position:position.cannon
+    });
+    return this;
 }
-JS3D.prototype.CylinderBody = function(geometry,material,mass,position){
-  position = position||engine.Vector3();
-  geometry = geometry|| new THREE.CylinderBufferGeometry();
-  mass = mass||0;
-  material = material||new THREE.MeshBasicMaterial();
-  var geo = {
-    height:geometry.parameters.height,
-    radTop:geometry.parameters.radiusTop,
-    radBot:geometry.parameters.radiusBottom,
-    numSegs:geometry.parameters.radialSegments,
-  }
-  var mesh = new THREE.Mesh(geo,material);
-  var body = new CANNON.Body({
-  shape:new CANNON.Cylinder(geo.radTop,geo.radBot,geo.height,geo.numSegs),
-  mass:mass,
-  position:position.cannon
-  });
-  return {
-    mesh:mesh,
-    physicsBody:body
-  }
-}
-JS3D.prototype.Character = function(width,height,depth,material,position,model){
+
+var Character = function(width,height,depth,material,position,model){
     var geo = new THREE.BoxBufferGeometry(width,height,depth);
     material = material||new THREE.MeshBasicMaterial();
-    position = position||this.Vector3();
-    var mesh = new THREE.Mesh(geo,material);
-    mesh.position.copy(position.three);
+    position = position||new Vector3D();
+    this.mesh = new THREE.Mesh(geo,material);
+    this.mesh.position.copy(position.three);
     if(model!=undefined){
-        mesh = model;
+        this.mesh = model;
     }
-    var hitBoxShape = new CANNON.Box(new CANNON.Vec3(width/2,height/2,depth/2));
-    var hitbox = new CANNON.Body({
-        shape:hitBoxShape,
+    this.hitBoxShape = new CANNON.Box(new CANNON.Vec3(width/2,height/2,depth/2));
+    this.hitbox = new CANNON.Body({
+        shape:this.hitBoxShape,
         position:position.cannon,
         fixedRotation:true,
         mass:1
     });
-    return {
-        mesh:mesh,
-        physicsBody:hitbox
-    }
+    this.physicsBody = this.hitbox;
 }
+
+JS3D.World = World;
+JS3D.Vector3D = Vector3D;
+JS3D.CharacterController = CharacterController;
+JS3D.BoxBody = BoxBody;
+JS3D.SphereBody = BoxBody;
+JS3D.CylinderBody = CylinderBody;
+JS3D.Character = Character
 window.JS3D = JS3D;

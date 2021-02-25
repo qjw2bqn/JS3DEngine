@@ -34,6 +34,7 @@
   light.position.set( -1, 1.75, 1 );
   light.position.multiplyScalar( 100 );
   world.scene.add(light);
+  light.castShadow = true;
   var controls = new THREE.OrbitControls(world.cameras[0],world.renderer.domElement);
   var player = new JS3D.Character(1,2,1,new THREE.MeshPhongMaterial(),new JS3D.Vector3(0,5,0));
   player.mesh.castShadow = true;

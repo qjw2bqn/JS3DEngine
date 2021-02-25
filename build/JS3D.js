@@ -1,7 +1,7 @@
 var JS3D = {
 
 }
-var Vector3D = function(x,y,z){
+var Vector3 = function(x,y,z){
     this.x = x||0;
     this.y = y||0;
     this.z = z||0;
@@ -9,31 +9,31 @@ var Vector3D = function(x,y,z){
     this.three = new THREE.Vector3(this.x,this.y,this.z);
     return this;
 }
-Vector3D.prototype.copy = function(v){
+Vector3.prototype.copy = function(v){
     this.cannon.copy(v.three);
     this.three.copy(v.cannon);
     this.x = v.x;
     this.y = v.y;
     this.z = v.z;
 }
-Vector3D.prototype.set = function(x,y,z){
+Vector3.prototype.set = function(x,y,z){
     this.cannon.set(x,y,z);
     this.three.set(x,y,z);
     this.x = x;
     this.y = y;
     this.z = z;
 }
-Vector3D.prototype.setX = function(x){
+Vector3.prototype.setX = function(x){
     this.x = x;
     this.cannon.x = x;
     this.three.x = x;
 }
-Vector3D.prototype.setY = function(y){
+Vector3.prototype.setY = function(y){
     this.y = y;
     this.cannon.y = y;
     this.three.y = y;
 }
-Vector3D.prototype.setZ = function(z){
+Vector3.prototype.setZ = function(z){
     this.z = z;
     this.cannon.z = z;
     this.three.z = z;

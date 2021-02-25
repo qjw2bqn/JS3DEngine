@@ -9,7 +9,7 @@ You need to have three.js and cannon.js already in your code when starting the w
 ```
 and you have all the libraries you need, extra ones can be added extremely easily, as shown in the examples folder.
 ```javascript
-var world = new JS3D().World();
+var world = new JS3D.World();
 var animate = function(){
   requestAnimationFrame(animate);
   world.update();
@@ -22,12 +22,12 @@ JS3D uses three.js geometries to create the physics bodies, but there are specia
 like adding a box
 ```javascript
 //assuming having the code above and putting this before the animate function
-var box = new JS3D().BoxBody(new THREE.BoxBufferGeometry(1,5,3),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
+var box = new JS3D.BoxBody(new THREE.BoxBufferGeometry(1,5,3),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
 world.add(box);
 ```
 A sphere is the same thing, except you replace the BoxBody with SphereBody, and you replace the geometry
 ```javascript
-var sphere = JS3D().SphereBody(new THREE.SphereBufferGeometry(1),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
+var sphere = new JS3D.SphereBody(new THREE.SphereBufferGeometry(1),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
 world.add(sphere);
 ```
 There is also a CylinderBody, but its the same story

@@ -5,38 +5,70 @@ var Vector3 = function(x,y,z){
     this.x = x||0;
     this.y = y||0;
     this.z = z||0;
-    this.cannon = new CANNON.Vec3(this.x,this.y,this.z);
-    this.three = new THREE.Vector3(this.x,this.y,this.z);
     return this;
 }
 Vector3.prototype.copy = function(v){
-    this.cannon.copy(v.three);
-    this.three.copy(v.cannon);
     this.x = v.x;
     this.y = v.y;
     this.z = v.z;
 }
 Vector3.prototype.set = function(x,y,z){
-    this.cannon.set(x,y,z);
-    this.three.set(x,y,z);
     this.x = x;
     this.y = y;
     this.z = z;
 }
-Vector3.prototype.setX = function(x){
-    this.x = x;
-    this.cannon.x = x;
-    this.three.x = x;
+Vector3.prototype.add = function(v){
+    this.x+=v.x;
+    this.y+=v.y;
+    this.z+=v.z;
+};
+Vector3.prototype.multiplyScalar = function(scaleFactor){
+    this.x*=scaleFactor;
+    this.y*=scaleFactor;
+    this.z*=scaleFactor;
 }
-Vector3.prototype.setY = function(y){
-    this.y = y;
-    this.cannon.y = y;
-    this.three.y = y;
+Vector3.prototype.lengthSq = function(){
+    return Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z);
 }
-Vector3.prototype.setZ = function(z){
-    this.z = z;
-    this.cannon.z = z;
-    this.three.z = z;
+Vector3.prototype.manhattanLength = function(){
+    return Math.abs(this.x)+Math.abs(this.y)+Math.abs(this.z);
+}
+Vector3.prototype.distanceTo = function(v){
+    return Math.sqrt((this.x-v.x)**2+(this.y-v.y)**2+(this.y-v.z)**2);
+}
+Vector3.prototype.manhattanDistanceTo = function(v){
+    return Math.abs(this.x-v.x)+Math.abs(this.y-v.y)+Math.abs(this.z-v.z);
+}
+Vector3.prototype.normalize = function(){
+    this.multiplyScalar(1/this.length);
+    return this;
+}
+Vector3.prototype.setLength = function(length){
+    this.normalize();
+    this.multiplyScalar(length);
+    return this;
+}
+Vector3.prototype.addScaledVector = function(v,scaleFactor){
+    v.multiplyScalar(scaleFactor);
+    this.add(v);
+}
+Vector3.prototype.sub = function(v){
+    this.x-=v.x;
+    this.y-=v.y;
+    this.z-=v.z;
+    return this;
+}
+Vector3.prototype.invert = function(){
+    this.x*=-1;
+    this.y*=-1;
+    this.z*=-1;
+    return this;
+}
+Vector3.prototype.clone = function(){
+    return new Vector3(this.x,this.y,this.z);
+}
+Vector3.prototype.isEqualTo = function(v){
+    return this.x===v.x&&this.y===v.y&&this.z===v.z;    
 }
 var World = function(target,gravity){
     this.gravity = gravity||new Vector3(0,-9.8,0);
@@ -58,7 +90,7 @@ var World = function(target,gravity){
     this.renderer.setSize(width,height);
     this.target.appendChild(this.renderer.domElement);
     this.bodies = [];
-    this.cWorld.gravity.copy(this.gravity.cannon);
+    this.cWorld.gravity.copy(this.gravity);
 }
 World.prototype.add = function(body){
     var physBod = body.physicsBody;
@@ -67,8 +99,8 @@ World.prototype.add = function(body){
     this.scene.add(mesh);
     this.bodies.push(body);
 }
-World.prototype.update = function(){
-    this.cWorld.step(1/60);
+World.prototype.update = function(dt){
+    this.cWorld.step(dt||1/60);
     this.renderer.render(this.scene,this.cameras[this.veiw]);
     for(var x in this.bodies){
         var cannonObj = this.bodies[x].physicsBody;
@@ -76,6 +108,11 @@ World.prototype.update = function(){
         threeObj.position.copy(cannonObj.position);
         threeObj.quaternion.copy(cannonObj.quaternion);
     }
+}
+World.prototype.resizeVeiwingWindow = function(){
+    this.renderer.setSize(this.target.clientWidth,this.target.clientHeight);
+    this.cameras[this.veiw].aspect = this.target.clientWidth/this.target.clientHeight;
+    this.cameras[this.veiw].updateProjectionMatrix();
 }
 World.prototype.addCamera = function(camera){
     this.cameras.push(camera);
@@ -168,13 +205,13 @@ var BoxBody = function(geometry,material,mass,position){
     geometry = geometry||new THREE.BoxBufferGeometry();
     material = material||new THREE.MeshBasicMaterial();
     mass = mass||0;
-    position = position||new Vector3D();
+    position = position||new Vector3();
     this.mesh = new THREE.Mesh(geometry,material);
-    this.mesh.position.copy(position.three);
+    this.mesh.position.copy(position);
     this.physicsBodyShape = new CANNON.Box(new CANNON.Vec3(geometry.parameters.width/2,geometry.parameters.height/2,geometry.parameters.depth/2));
     this.physicsBody = new CANNON.Body({
         mass:mass,
-        position:position.cannon,
+        position:position,
         shape:this.physicsBodyShape
     })
     return this;
@@ -186,20 +223,20 @@ var SphereBody = function(geometry,material,mass,position){
         radius:geometry.parameters.radius
     }
     mass = mass||0;
-    position = position||new Vector3D();
+    position = position||new Vector3();
     this.mesh = new THREE.Mesh(geometry,material);
-    mesh.position.copy(position.three);
+    mesh.position.copy(position);
     this.physicsBodyShape = new CANNON.Sphere(geo.radius);
     this.physicsBody = new CANNON.Body({
         physicsBodyShape,
         mass:mass,
-        position:position.cannon
+        position:position
     });
     return this;
 }
 
 var CylinderBody = function(geometry,material,mass,position){
-    position = position||new Vector3D();
+    position = position||new Vector3();
     geometry = geometry|| new THREE.CylinderBufferGeometry();
     mass = mass||0;
     material = material||new THREE.MeshBasicMaterial();
@@ -210,12 +247,12 @@ var CylinderBody = function(geometry,material,mass,position){
       numSegs:geometry.parameters.radialSegments,
     }
     this.mesh = new THREE.Mesh(geo,material);
-    this.mesh.position.copy(position.three);
+    this.mesh.position.copy(position);
     this.physicsBodyShape = new CANNON.Cylinder(geo.radTop,geo.radBot,geo.height,geo.numSegs)
     this.physicsBody = new CANNON.Body({
     shape:this.physicsBodyShape,
     mass:mass,
-    position:position.cannon
+    position:position
     });
     return this;
 }
@@ -223,16 +260,16 @@ var CylinderBody = function(geometry,material,mass,position){
 var Character = function(width,height,depth,material,position,model){
     var geo = new THREE.BoxBufferGeometry(width,height,depth);
     material = material||new THREE.MeshBasicMaterial();
-    position = position||new Vector3D();
+    position = position||new Vector3();
     this.mesh = new THREE.Mesh(geo,material);
-    this.mesh.position.copy(position.three);
+    this.mesh.position.copy(position);
     if(model!=undefined){
         this.mesh = model;
     }
     this.hitBoxShape = new CANNON.Box(new CANNON.Vec3(width/2,height/2,depth/2));
     this.hitbox = new CANNON.Body({
         shape:this.hitBoxShape,
-        position:position.cannon,
+        position:position,
         fixedRotation:true,
         mass:1
     });

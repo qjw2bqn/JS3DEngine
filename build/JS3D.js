@@ -11,21 +11,25 @@ Vector3.prototype.copy = function(v){
     this.x = v.x;
     this.y = v.y;
     this.z = v.z;
+    return this;
 }
 Vector3.prototype.set = function(x,y,z){
     this.x = x;
     this.y = y;
     this.z = z;
+    return this;
 }
 Vector3.prototype.add = function(v){
     this.x+=v.x;
     this.y+=v.y;
     this.z+=v.z;
+    return this;
 };
 Vector3.prototype.multiplyScalar = function(scaleFactor){
     this.x*=scaleFactor;
     this.y*=scaleFactor;
     this.z*=scaleFactor;
+    return this;
 }
 Vector3.prototype.lengthSq = function(){
     return Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z);
@@ -51,6 +55,7 @@ Vector3.prototype.setLength = function(length){
 Vector3.prototype.addScaledVector = function(v,scaleFactor){
     v.multiplyScalar(scaleFactor);
     this.add(v);
+    return this;
 }
 Vector3.prototype.sub = function(v){
     this.x-=v.x;

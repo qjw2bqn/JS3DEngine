@@ -36,31 +36,53 @@ inverts this vector, i.e. x = -x, y = -y, z = -z
 returns a new vector with the same x, y, and z values as this one
 #### isEqualTo(v): Boolean
 checks if vector v is exactly the same as this vector
-####
+#### directionTo(v): Vector3
+returns a normalized Vector3 pointing in the direction from this vector, to the other one. because of a small bug, you have to do .invert() to get the actual direction
 ## Box Body
-JS3D.BoxBody(geometry,material,mass,position): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
-geometry:THREE.BoxGeometry or THREE.BoxBufferGeometry  
-material: THREE material  
-mass: Number, if not put in will default to 0  
-position: engine.Vector3, if not set, defaults to a blank engine.Vector3
+JS3D.BoxBody(parameters): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
+parameters{  
+&nbsp;&nbsp;halfExtents:Vector3/Vec3 (CANNON/THREE/JS3D)  
+&nbsp;&nbsp;material: THREE.Material  
+&nbsp;&nbsp;mass: Number  
+&nbsp;&nbsp;position: JS3D.Vector3  
+}
+### methods
+#### setShadows(cast, recieve): null
+sets the shadows for the mesh of the object. Make sure to have a light, and shadowMap enabled
+## Invisible Box Body
+JS3D.InvisBoxBody(parameters): JS3D.BoxBody  
+parameters{  
+&nbsp;&nbsp;halfExtents: Vector3/Vec3,  
+&nbsp;&nbsp;mass: Number,  
+&nbsp;&nbsp;position: JS3D.Vector3  
+}
+### methods
+setShadows(cast, recieve)
+cast parameter doesn't change anything as the box is invisible
 ## Sphere Body
-JS3D.SphereBody(geometry,material,mass,position): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
-geometry: THREE.SphereGeometry or THREE.SphereBufferGeometry  
-material: THREE material  
-mass: Number, if not set, defaults to 0  
-position: engine.Vector3, if not set, defaults to a blank engine.Vector3
+JS3D.SphereBody(parameters): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
+parameters{  
+&nbsp;&nbsp;geometry: THREE.SphereGeometry or THREE.SphereBufferGeometry  
+&nbsp;&nbsp;material: THREE.Material  
+&nbsp;&nbsp;mass: Number, if not set, defaults to 0  
+&nbsp;&nbsp;position: JS3D.Vector3  
+}
 ## Cylinder Body
-JS3D.CylinderBody(geometry,material,mass,position): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
-geometry: THREE.CylinderGeometry or THREE.CylinderBufferGeometry  
-material: THREE.Material  
-mass: Number, if not set, defaults to 0,  
-position: engine.Vector3, if not set, defaults to a blank engine.Vector3();  
+JS3D.CylinderBody(parameters): {mesh:THREE.Mesh,physicsBody:CANNON.Body}  
+parameters{  
+&nbsp;&nbsp;geometry: THREE.CylinderGeometry or THREE.CylinderBufferGeometry  
+&nbsp;&nbsp;material: THREE.Material  
+&nbsp;&nbsp;mass: Number, if not set, defaults to 0  
+&nbsp;&nbsp;position: JS3D.Vector3  
+}
 ## Character Controller
-JS3D.CharacterController(character,camera, moveSpeed, fixedCam): this  
-character: engine.Character  
-camera: THREE.Camera  
-moveSpeed: Number  
-fixedCam: Boolean
+JS3D.CharacterController(parameters): this  
+parameters{  
+&nbsp;&nbsp;character: JS3D.Character  
+&nbsp;&nbsp;camera: THREE.Camera  
+&nbsp;&nbsp;moveSpeed: Number  
+&nbsp;&nbsp;fixedCam: Boolean  
+}
 ### Methods
 #### forward(): Null
 moves the character forward with respect to the camera  
@@ -76,17 +98,21 @@ jumpVelocity: Number
 #### moveDir:
 {left:boolean, right:boolean, forward:boolean, backward:boolean}
 ## Character
-JS3D.Character(width,height,depth,material,position,model):{mesh:THREE.Mesh,physicsBody:CANNON.Body}  
-width, height, depth: Numbers, size for hitbox  
-material: THREE.Material  
-position: engine.Vector3  
-model:THREE.Mesh, optional model for the character
+JS3D.Character(parameters):{mesh:THREE.Mesh,physicsBody:CANNON.Body}  
+parameters{  
+&nbsp;&nbsp;width, height, depth: Numbers, size for hitbox  
+&nbsp;&nbsp;material: THREE.Material  
+&nbsp;&nbsp;position: JS3D.Vector3  
+&nbsp;&nbsp;model:THREE.Mesh, optional model for the character  
+}
 ## World
-engine.World(target,gravity):this  
-target: HTMLDOMElement, place where this will be placed, defaults to document.body  
-gravity:engine.Vector3(), if not set, defaults to engine.Vector3(0,-9.8,0)
+JS3D.World(parameters):this  
+parameters{  
+&nbsp;&nbsp;target: HTMLDOMElement, place where this will be placed, defaults to document.body  
+&nbsp;&nbsp;gravity:engine.Vector3(), if not set, defaults to engine.Vector3(0,-9.8,0)  
+}
 ### Methods
-#### add(body:engine.ShapeBody): Null
+#### add(body:JS3D.ShapeBody): Null
 adds body to the world  
 #### update(): Null
 updates the world and renders  
@@ -94,4 +120,15 @@ updates the world and renders
 add another camera for extra rendering options  
 #### setVeiwMode(mode: Number): Null
 switch which camera is to be used for rendering the scene
-
+## Gravity Feild
+JS3D.GravityFeild(parameters):this  
+parameters{  
+&nbsp;&nbsp;position: JS3D.Vector3() (Must be a JS3D Vector3)  
+&nbsp;&nbsp;force: Number  
+&nbsp;&nbsp;far: farthest point that gets effected by gravity  
+}  
+### Methods
+#### add(body): null
+adds a body to the gravity feild
+#### update():null
+updates the objects in the gravity feild

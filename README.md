@@ -22,12 +22,22 @@ JS3D uses three.js geometries to create the physics bodies, but there are specia
 like adding a box
 ```javascript
 //assuming having the code above and putting this before the animate function
-var box = new JS3D.BoxBody(new THREE.BoxBufferGeometry(1,5,3),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
+var box = new JS3D.BoxBody({
+  halfExtents:new JS3D.Vector3(0.5,2.5,1.5),
+  material:new THREE.MeshBasicMaterial(),
+  mass:1,
+  position:new JS3D().Vector3(0,5,0)
+});
 world.add(box);
 ```
-A sphere is the same thing, except you replace the BoxBody with SphereBody, and you replace the geometry
+A sphere is the same thing, except you replace the BoxBody with SphereBody, and halfExtents is a geometry
 ```javascript
-var sphere = new JS3D.SphereBody(new THREE.SphereBufferGeometry(1),new THREE.MeshBasicMaterial(),1,new JS3D().Vector3(0,5,0));
+var sphere = new JS3D.SphereBody({
+  geometry:new THREE.SphereBufferGeometry(1),
+  material: new THREE.MeshBasicMaterial(),
+  mass: 1,
+  position:new JS3D().Vector3(0,5,0)
+});
 world.add(sphere);
 ```
 There is also a CylinderBody, but its the same story

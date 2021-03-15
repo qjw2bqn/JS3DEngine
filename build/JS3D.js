@@ -365,7 +365,10 @@ CylinderBody.prototype.setShadows = function(cast,receive){
 */
 var Character = function(parameters){
     parameters = parameters||{};
-    var geo = new THREE.BoxBufferGeometry(parameters.width||1,parameters.height||2,parameters.depth||1);
+    var width = parameters.width||1;
+    var height = parameters.height||2;
+    var depth = parameters.depth||1;
+    var geo = new THREE.BoxBufferGeometry(width,height,depth);
     var material = parameters.material||new THREE.MeshBasicMaterial();
     var position = parameters.position||new Vector3();
     var model = parameters.model;

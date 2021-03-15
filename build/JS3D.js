@@ -81,6 +81,7 @@ Vector3.prototype.directionTo = function(v){
     return dir.normalize();
 }
 var World = function(parameters){
+    parameters = parameters||{};
     this.gravity = parameters.gravity||new Vector3(0,-9.8,0);
     this.target = parameters.target||document.body;
     this.veiw = 0;
@@ -168,6 +169,7 @@ World.prototype.setVeiwMode = function(mode){
     
 }
 var GravityField = function(parameters){
+    parameters = parameters||{};
     this.position = parameters.position||new Vector3();
     this.force = parameters.force||5;
     this.far = parameters.far||10;
@@ -191,6 +193,7 @@ GravityField.prototype.add = function(body){
 }
 
 var CharacterController = function(parameters){
+    parameters = parameters||{};
     this.character = parameters.character;
     this.camera = parameters.camera;
     this.fixedCam = parameters.fixedCam||false;
@@ -262,6 +265,7 @@ CharacterController.prototype.jump = function(jumpVelocity){
 }
 
 var BoxBody = function(parameters){
+    parameters = parameters||{};
     var halfExtents = parameters.halfExtents||new Vector3();
     var material = parameters.material||new THREE.MeshBasicMaterial();
     var mass = parameters.mass||0;
@@ -286,6 +290,7 @@ BoxBody.prototype.setShadows = function(cast,receive){
 }
 
 var InvisBoxBody = function(parameters){
+    parameters = parameters||{};
     var halfExtents = parameters.halfExtents||new Vector3();
     var mass = parameters.mass||0;
     var position = parameters.position||new Vector3();
@@ -297,6 +302,7 @@ var InvisBoxBody = function(parameters){
 }
 
 var SphereBody = function(parameters){
+    parameters = parameters||{};
     var geometry = parameters.geometry||new THREE.SphereBufferGeometry();
     var material = parameters.material||new THREE.MeshBasicMaterial();
     var mass = parameters.mass||0;
@@ -324,6 +330,7 @@ SphereBody.prototype.setShadows = function(cast, receive){
 }
 
 var CylinderBody = function(parameters){
+    parameters = parameters||{};
     var geometry = geometry|| new THREE.CylinderBufferGeometry();
     var material = parameters.material||new THREE.MeshBasicMaterial();
     var mass = parameters.mass||0;
@@ -357,6 +364,7 @@ CylinderBody.prototype.setShadows = function(cast,receive){
 /*
 */
 var Character = function(parameters){
+    parameters = parameters||{};
     var geo = new THREE.BoxBufferGeometry(parameters.width||1,parameters.height||2,parameters.depth||1);
     var material = parameters.material||new THREE.MeshBasicMaterial();
     var position = parameters.position||new Vector3();

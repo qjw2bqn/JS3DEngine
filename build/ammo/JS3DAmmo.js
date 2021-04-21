@@ -118,98 +118,6 @@ Vector3.prototype.isAlmostEqualTo = function(v,delta){
 Vector3.prototype.dot = function(v){
     return this.x*v.x+this.y*v.y+this.z*v.z;
 }
-/**
- * 
- * @param {Number} x 
- * @param {Number} y 
- * @param {Number} z 
- * @param {Number} w 
- */
-var Quaternion = function(x,y,z,w){
-    this.x = x||0;
-    this.y = y||0;
-    this.z = z||0;
-    this.w = w||1;
-}
-Quaternion.prototype.set = function(x,y,z,w){
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.w = w;
-    return this;
-}
-Quaternion.prototype.copy = function(q){
-    if(typeof q.x == 'function'){
-        this.set(q.x(),q.y(),q.z(),q.w());
-    }else{
-        this.set(q.x,q.y,q.z,q.w);
-    }
-    return this;
-}
-Quaternion.prototype.setFromAxisAngle = function(axis,angle){
-    let a = angle/2,s = Math.sin(a);
-    this.x = axis.x * s;
-	this.y = axis.y * s;
-	this.z = axis.z * s;
-	this.w = Math.cos( halfAngle );
-}
-Quaternion.prototype.dot = function(q){
-    return this.x*q.x+this.y*q.y+this.z*q.z+this.w*q.w;
-}
-Quaternion.prototype.lengthSq = function(){
-    return Math.sqrt(this.x**2+this.y**2+this.z**2+this.w**2);
-}
-Quaternion.prototype.setFromUnitVectors = function(vFrom,vTo){
-    let r = vFrom.dot( vTo ) + 1;
-
-		if ( r < Number.EPSILON ) {
-
-			// vFrom and vTo point in opposite directions
-
-			r = 0;
-
-			if ( Math.abs( vFrom.x ) > Math.abs( vFrom.z ) ) {
-
-				this.x = - vFrom.y;
-				this.y = vFrom.x;
-				this.z = 0;
-				this.w = r;
-
-			} else {
-
-				this.x = 0;
-				this.y = - vFrom.z;
-				this.z = vFrom.y;
-				this.w = r;
-
-			}
-
-		} else {
-
-			// crossVectors( vFrom, vTo ); // inlined to avoid cyclic dependency on Vector3
-
-			this.x = vFrom.y * vTo.z - vFrom.z * vTo.y;
-			this.y = vFrom.z * vTo.x - vFrom.x * vTo.z;
-			this.z = vFrom.x * vTo.y - vFrom.y * vTo.x;
-			this.w = r;
-
-		}
-
-		return this.normalize();
-
-}
-Quaternion.prototype.normalize = function(){
-    let l = this.lengthSq();
-    if(l===0){
-        this.set(0,0,0,1);
-    }else{
-        l = 1/l;
-        this.x*=l;
-        this.y*=l;
-        this.z*=l;
-        this.w*=l;
-    }
-}
 
 /**
  * 
@@ -1018,7 +926,6 @@ var HeightFeild = function(parameters){
     this.material = parameters.material||new THREE.MeshBasicMaterial();
 }
 exports.Vector3 = Vector3;
-exports.Quaternion = Quaternion;
 exports.World = World;
 exports.Body = Body;
 exports.BoxShape = BoxShape;

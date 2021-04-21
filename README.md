@@ -1,10 +1,12 @@
 # JS3D
-A game engine made with three.js and cannon.js
+A game engine made with three.js and cannon.js, or Ammo.js
+## API
+the API is slightly different between the two engines. Refer to documentation for differences
 ## Setting up
 You need to have three.js and cannon.js already in your code when starting the website, as well as the JS3D library
 ```html
 <script src='path-to-threejs/three.js'></script>
-<script src='path-to-cannonjs/cannon.js'></script>
+<script src='path-to-cannonjs/cannon.js'></script> <!--<script src='path-to-ammojs/ammo.js></script>-->
 <script src='path-to-JS3D/JS3D.js'></script>
 ```
 and you have all the libraries you need, extra ones can be added extremely easily, as shown in the examples folder.
@@ -41,13 +43,13 @@ var sphere = new JS3D.SphereBody({
 world.add(sphere);
 ```
 There is also a CylinderBody, but its the same story
-## will this take away any functionality from cannon.js or three.js?
+## will this take away any functionality from cannon.js/ Ammo.js or three.js?
 No. you can get all of the world related things from the base engine by just doing world.something
 ```javascript
-world.camera //camera
+world.cameras //[camera]
 world.renderer //renderer
 ...
 ```
-or if you just want to get the three portion of a body, you can do body.mesh. if you want the cannon portion it is body.physicsBody.
+or if you just want to get the three portion of a body, you can do body.mesh. if you want the cannon/ammo portion it is body.physicsBody.
 ## Special Thanks
-I would like to give special thanks to @mrdoob and @schteppe for two amazing libraries that allowed me to create this, three.js and cannon.js, respectively
+I would like to give special thanks to @mrdoob, @schteppe, and @kripken for three amazing libraries that allowed me to create this, three.js, cannon.js, and Ammo.js, respectively

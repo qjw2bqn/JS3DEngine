@@ -4,7 +4,7 @@
     <title>Adding Lights</title>
     <script src='../../libs/three.js'></script>
     <script src='../../libs/cannon.js'></script>
-    <script src='../../build/JS3D.js'></script>
+    <script src='../../build/cannon/JS3DCannon.js'></script>
   </head>
   <body style='margin:0px'>
   
@@ -38,13 +38,11 @@
   light.shadow.mapSize.height = 4096;
   light.near = 0.5;
   light.far = 500;
-  var v = {
-      ve:145
-  }
-  light.shadow.camera.left = -v.ve/2;
-  light.shadow.camera.right = v.ve/2;
-  light.shadow.camera.top = v.ve/2;
-  light.shadow.camera.bottom = -v.ve/2;
+  var v = 145
+  light.shadow.camera.left = -v/2;
+  light.shadow.camera.right = v/2;
+  light.shadow.camera.top = v/2;
+  light.shadow.camera.bottom = -v/2;
   light.position.set( -1, 1.75, 1 );
   light.position.multiplyScalar( 100 );
   world.scene.add(light);

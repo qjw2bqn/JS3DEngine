@@ -41,11 +41,11 @@
       light.position.set( -1, 1.75, 1 );
       light.position.multiplyScalar( 100 );
       world.scene.add(light);
+      animate();
     }
   var animate = function(){
     requestAnimationFrame(animate);
     let dt = clock.getDelta();
     world.update(dt);
   }
-  animate();
   </script>

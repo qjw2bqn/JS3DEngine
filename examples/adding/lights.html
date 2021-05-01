@@ -3,52 +3,61 @@
   <head>
     <title>Adding Lights</title>
     <script src='../../libs/three.js'></script>
-    <script src='../../libs/cannon.js'></script>
-    <script src='../../build/cannon/JS3DCannon.js'></script>
+    <script src='../../libs/ammo.js'></script>
+    <script src='../../build/ammo/JS3DAmmo.js'></script>
   </head>
   <body style='margin:0px'>
   
   </body>
   <script>
-  var world = new JS3D.World();
-  world.cameras[0].position.set(0,5,10);
-  world.cameras[0].lookAt(world.scene.position);
-  var box = new JS3D.BoxBody({
-    halfExtents:new JS3D.Vector3(0.5,0.5,0.5),
-    material:new THREE.MeshPhongMaterial(),
-    mass:1,
-    position:new JS3D.Vector3(0,5,0)
-  });
-  box.mesh.castShadow = true;
-  var ground = new JS3D.BoxBody({
-    halfExtents:new JS3D.Vector3(50,1,50),
-    material:new THREE.MeshPhongMaterial(),
-    mass:0,
-    position:new JS3D.Vector3(0,-1,0)
-  });
-  ground.mesh.receiveShadow = true;
-  world.add(box);
-  world.add(ground);
-  world.renderer.shadowMap.enabled = true;
-  var light = new THREE.DirectionalLight();
-  light.position.set(10,5,10);
-  light.position.set(0,10,10);
-  light.castShadow = true;
-  light.shadow.mapSize.width = 4096;
-  light.shadow.mapSize.height = 4096;
-  light.near = 0.5;
-  light.far = 500;
-  var v = 145
-  light.shadow.camera.left = -v/2;
-  light.shadow.camera.right = v/2;
-  light.shadow.camera.top = v/2;
-  light.shadow.camera.bottom = -v/2;
-  light.position.set( -1, 1.75, 1 );
-  light.position.multiplyScalar( 100 );
-  world.scene.add(light);
+    var world,clock;
+    Ammo().then(start);
+    function start(){
+      world = new JS3DAmmo.World({
+        backgroundColor:0x8080ff
+      });
+      clock = new THREE.Clock();
+      world.cameras[0].position.set(0,5,10);
+      world.cameras[0].lookAt(world.scene.position);
+      var box = new JS3DAmmo.Body({
+        shape:new JS3DAmmo.BoxShape({
+          halfExtents:new JS3DAmmo.Vector3(0.5,0.5,0.5),
+          material:new THREE.MeshPhongMaterial()
+        }),
+        mass:1,
+        position:new JS3DAmmo.Vector3(0,5,0)
+      });
+      box.setShadows();
+      var ground = new JS3DAmmo.Body({
+        shape:new JS3DAmmo.BoxShape({
+          halfExtents:new JS3DAmmo.Vector3(50,1,50),
+          material:new THREE.MeshPhongMaterial(),
+        }),
+        mass:0,
+        position:new JS3DAmmo.Vector3(0,-1,0)
+      });
+      ground.setShadows(false);
+      world.add(box);
+      world.add(ground);
+      world.renderer.shadowMap.enabled = true;
+      var light = new THREE.DirectionalLight();
+      light.position.set(-100,175,100);
+      light.castShadow = true;
+      light.shadow.mapSize.width = 4096;
+      light.shadow.mapSize.height = 4096;
+      light.near = 0.5;
+      light.far = 500;
+      var v = 145
+      light.shadow.camera.left = -v/2;
+      light.shadow.camera.right = v/2;
+      light.shadow.camera.top = v/2;
+      light.shadow.camera.bottom = -v/2;
+      world.scene.add(light);
+  }
   var animate = function(){
     requestAnimationFrame(animate);
-    world.update();
+    let dt = clock.getDelta();
+    world.update(dt);
   }
   animate();
   </script>

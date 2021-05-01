@@ -15,7 +15,9 @@
     let world,clock,controls,gui;
     Ammo().then(start);
     function start(){
-      world = new JS3DAmmo.World();
+      world = new JS3DAmmo.World({
+        backgroundColor:0x8080ff
+      });
       world.cameras[0].position.set(0,5,10);
       world.cameras[0].lookAt(world.scene.position);
       clock = new THREE.Clock();

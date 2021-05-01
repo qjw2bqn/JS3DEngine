@@ -5,18 +5,21 @@
     <script src='../../libs/three.js'></script>
     <script src='../../libs/ammo.js'></script>
     <script src='../../build/ammo/JS3DAmmo.js'></script>
+    <script src='../../libs/dat.gui.min.js'></script>
   </head>
   <body style='margin:0px'>
     
   </body>
   <script>
-    var world,clock;
+    var world,clock,gui;
     Ammo().then(start);
     function start(){
       world = new JS3DAmmo.World({
         backgroundColor:0x8080ff
       });
       clock = new THREE.Clock();
+      gui = new dat.GUI();
+      gui.add(world,'debug');
       var box = new JS3DAmmo.Body({
         shape:new JS3DAmmo.BoxShape({
         halfExtents:new JS3DAmmo.Vector3(0.5,0.5,0.5),

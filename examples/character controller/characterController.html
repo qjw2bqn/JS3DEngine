@@ -6,6 +6,7 @@
     <script src='../../libs/ammo.js'></script>
     <script src='../../build/ammo/JS3DAmmo.js'></script>
     <script src='../../libs/Orbit Controls.js'></script>
+    <script src='../../libs/dat.gui.min.js'></script>
   </head>
   <body style='margin:0px;'>
   
@@ -20,6 +21,8 @@
       world.cameras[0].position.set(0,5,10);
       world.cameras[0].lookAt(world.scene.position);
       clock = new THREE.Clock();
+      gui = new dat.GUI();
+      gui.add(world,'debug');
       var ground = new JS3DAmmo.Body({
         shape:new JS3DAmmo.BoxShape({
         halfExtents:new JS3DAmmo.Vector3(50,1,50),

@@ -53,11 +53,11 @@
       light.shadow.camera.top = v/2;
       light.shadow.camera.bottom = -v/2;
       world.scene.add(light);
+      animate();
   }
   var animate = function(){
     requestAnimationFrame(animate);
     let dt = clock.getDelta();
     world.update(dt);
   }
-  animate();
   </script>

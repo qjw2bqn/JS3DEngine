@@ -6,25 +6,28 @@
     <script src='../../libs/ammo.js'></script>
     <script src='../../libs/Orbit Controls.js'></script>
     <script src='../../build/ammo/JS3DAmmo.js'></script>
+    <script src='../../libs/dat.gui.min.js'></script>
   </head>
   <body style='margin:0px;'>
   
   </body>
   <script>
-    let world,clock,controls;
+    let world,clock,controls,gui;
     Ammo().then(start);
     function start(){
       world = new JS3DAmmo.World();
       world.cameras[0].position.set(0,5,10);
       world.cameras[0].lookAt(world.scene.position);
       clock = new THREE.Clock();
+      gui = new dat.GUI();
+      gui.add(world,'debug');
       var box = new JS3DAmmo.Body({
         shape:new JS3DAmmo.BoxShape({
           halfExtents:new JS3DAmmo.Vector3(0.5,0.5,0.5),
           material:new THREE.MeshPhongMaterial()
         }),
         mass:1,
-        position:new JS3D.Vector3(0,5,0)
+        position:new JS3DAmmo.Vector3(0,5,0)
       });
       var ground = new JS3DAmmo.Body({
         shape:new JS3DAmmo.BoxShape({

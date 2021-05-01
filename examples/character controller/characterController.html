@@ -11,79 +11,54 @@
   
   </body>
   <script>
-  var world = new JS3D.World();
-  world.cameras[0].position.set(0,5,10);
-  world.cameras[0].lookAt(world.scene.position);
-  var ground = new JS3D.BoxBody({
-    halfExtents:new JS3D.Vector3(50,1,50),
-    material:new THREE.MeshPhongMaterial(),
-    mass:0,
-    position:new JS3D.Vector3(0,-1,0)
-  });
-  world.add(ground);
-  var light = new THREE.DirectionalLight();
-  light.position.set( -1, 1.75, 1 );
-  light.position.multiplyScalar( 100 );
-  world.scene.add(light);
-  var controls = new THREE.OrbitControls(world.cameras[0],world.renderer.domElement);
-  var player = new JS3D.Character({
-    material:new THREE.MeshPhongMaterial(),
-    position:new JS3D.Vector3(0,5,0)
-  });
-  controls.target = player.mesh.position;
-  world.add(player);
-  var characterController = new JS3D.CharacterController({
-    character:player,
-    camera:world.cameras[0],
-    moveSpeed:1/7.5
-  });
-  var move = characterController.moveDir;
-  document.onkeydown = function(){
-    switch(event.keyCode){
-      case 87:
-        move.forward = true;
-        break;
-      case 83:
-        move.backward = true;
-        break;
-      case 65:
-        move.left = true;
-        break;
-      case 68:
-        move.right = true;
-        break;
-    }
-  }
-  document.onkeyup = function(){
-    switch(event.keyCode){
-      case 87:
-        move.forward = false;
-        break;
-     case 83:
-        move.backward = false;
-        break;
-    case 65:
-        move.left = false;
-        break;
-    case 68:
-        move.right = false;
-        break;
+    let world,clock,controls;
+    Ammo().then(start);
+    function start(){
+      world = new JS3DAmmo.World({
+        backgroundColor:0x8080ff
+      });
+      world.cameras[0].position.set(0,5,10);
+      world.cameras[0].lookAt(world.scene.position);
+      clock = new THREE.Clock();
+      var ground = new JS3DAmmo.Body({
+        shape:new JS3DAmmo.BoxShape({
+        halfExtents:new JS3DAmmo.Vector3(50,1,50),
+        material:new THREE.MeshPhongMaterial()
+        }),
+        mass:0,
+        position:new JS3DAmmo.Vector3(0,-1,0)
+      });
+      world.add(ground);
+      var light = new THREE.DirectionalLight();
+      light.position.set( -1, 1.75, 1 );
+      light.position.multiplyScalar( 100 );
+      world.scene.add(light);
+      var controls = new THREE.OrbitControls(world.cameras[0],world.renderer.domElement);
+      var player = new JS3DAmmo.Character({
+        material:new THREE.MeshPhongMaterial(),
+        position:new JS3DAmmo.Vector3(0,5,0)
+      });
+      controls.target = player.mesh.position;
+      world.add(player);
+      var characterController = new JS3DAmmo.CharacterController({
+        character:player,
+        camera:world.cameras[0],
+        moveSpeed:10
+      });
+      document.onkeydown = function(){
+        characterController.moveDirUpdateSta(event.keyCode,87,83,65,68)
       }
-  }
+      document.onkeyup = function(){
+        characterController.moveDirUpdateSto(event.keyCode,87,83,65,68)
+      }
+      world.characterController = characterController;
+      animate();
+    }
   var animate = function(){
     requestAnimationFrame(animate);
-    if(move.right){
-      characterController.right();
-    }else if(move.left){
-      characterController.left();
-    }
-    if(move.forward){
-      characterController.forward();
-    }else if(move.backward){
-      characterController.backward();
-    }
+    let dt = clock.getDelta();
     controls.update();
-    world.update();
+    world.update(dt);
   }
   animate();
   </script>

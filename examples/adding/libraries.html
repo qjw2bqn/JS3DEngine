@@ -26,13 +26,13 @@
         mass:1,
         position:new JS3D.Vector3(0,5,0)
       });
-      var ground = new JS3D.Body({
-        shape:new JS3D.BoxShape({
-          halfExtents:new JS3D.Vector3(50,1,50),
+      var ground = new JS3DAmmo.Body({
+        shape:new JS3DAmmo.BoxShape({
+          halfExtents:new JS3DAmmo.Vector3(50,1,50),
           material:new THREE.MeshPhongMaterial()
         }),
         mass:0,
-        position:new JS3D.Vector3(0,-1,0)
+        position:new JS3DAmmo.Vector3(0,-1,0)
       });
       world.add(box);
       world.add(ground);

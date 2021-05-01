@@ -3,39 +3,49 @@
   <head>
     <title>Adding Libraries</title>
     <script src='../../libs/three.js'></script>
-    <script src='../../libs/cannon.js'></script>
+    <script src='../../libs/ammo.js'></script>
     <script src='../../libs/Orbit Controls.js'></script>
-    <script src='../../build/cannon/JS3DCannon.js'></script>
+    <script src='../../build/ammo/JS3DAmmo.js'></script>
   </head>
   <body style='margin:0px;'>
   
   </body>
   <script>
-  var world = new JS3D.World();
-  world.cameras[0].position.set(0,5,10);
-  world.cameras[0].lookAt(world.scene.position);
-  var box = new JS3D.BoxBody({
-    halfExtents:new JS3D.Vector3(0.5,0.5,0.5),
-    material:new THREE.MeshPhongMaterial(),
-    mass:1,
-    position:new JS3D.Vector3(0,5,0)
-  });
-  var ground = new JS3D.BoxBody({
-    halfExtents:new JS3D.Vector3(50,1,50),
-    material:new THREE.MeshPhongMaterial(),
-    mass:0,
-    position:new JS3D.Vector3(0,-1,0)
-  });
-  world.add(box);
-  world.add(ground);
-  var controls = new THREE.OrbitControls(world.cameras[0],world.renderer.domElement);
-  var light = new THREE.DirectionalLight();
-  light.position.set( -1, 1.75, 1 );
-  light.position.multiplyScalar( 100 );
-  world.scene.add(light);
+    let world,clock,controls;
+    Ammo().then(start);
+    function start(){
+      world = new JS3DAmmo.World();
+      world.cameras[0].position.set(0,5,10);
+      world.cameras[0].lookAt(world.scene.position);
+      clock = new THREE.Clock();
+      var box = new JS3DAmmo.Body({
+        shape:new JS3DAmmo.BoxShape({
+          halfExtents:new JS3D.Vector3(0.5,0.5,0.5),
+          material:new THREE.MeshPhongMaterial()
+        }),
+        mass:1,
+        position:new JS3D.Vector3(0,5,0)
+      });
+      var ground = new JS3D.Body({
+        shape:new JS3D.BoxShape({
+          halfExtents:new JS3D.Vector3(50,1,50),
+          material:new THREE.MeshPhongMaterial()
+        }),
+        mass:0,
+        position:new JS3D.Vector3(0,-1,0)
+      });
+      world.add(box);
+      world.add(ground);
+      var controls = new THREE.OrbitControls(world.cameras[0],world.renderer.domElement);
+      var light = new THREE.DirectionalLight();
+      light.position.set( -1, 1.75, 1 );
+      light.position.multiplyScalar( 100 );
+      world.scene.add(light);
+    }
   var animate = function(){
     requestAnimationFrame(animate);
-    world.update();
+    let dt = clock.getDelta();
+    world.update(dt);
   }
   animate();
   </script>

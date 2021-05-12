@@ -39,17 +39,17 @@ world.add(box);
 ```
 A sphere is the same thing, except you replace the BoxShape with SphereShape, and halfExtents is a geometry
 ```javascript
-var sphere = new JS3D.SphereBody({
-  shape:new JS3D.SphereShape({
+var sphere = new JS3DAmmo.Body({
+  shape:new JS3DAmmo.SphereShape({
     geometry:new THREE.SphereBufferGeometry(1),
     material: new THREE.MeshBasicMaterial(),
   }),
   mass: 1,
-  position:new JS3D().Vector3(0,5,0)
+  position:new JS3DAmmo.Vector3(0,5,0)
 });
 world.add(sphere);
 ```
-There is also a CylinderBody, but its the same story
+There is also a CylinderShape and a ConeShape, but its the same story
 ## will this take away any functionality from Ammo.js or three.js?
 No. you can get all of the world related things from the base engine by just doing world.something
 ```javascript

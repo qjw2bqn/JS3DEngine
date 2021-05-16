@@ -1,4 +1,41 @@
 # Documentation (Ammo.js)
+## ENUMS
+### SHAPES
+BoxShape: In shape impostor, put in a half extents vector  
+SphereShape: In shape impostor, put in a radius  
+CylinderImpostor: In shape Impostor, put in a radius and a height  
+ConeImpostor: In shape impostor, put in a radius and a height  
+CapsuleImpostor: In shape impostor, put in a radius and a height  
+## BoxBufferGeometry(width,height,depth)
+JS3DAmmo.BoxBufferGeometry(width, height, depth);
+### Parameters
+width: Number, default:1  
+height: Number, default:1  
+depth: Number, default:1
+### Properties
+Extents THREE.BufferGeometry, see [BufferGeometry](https://threejs.org/docs/#api/en/core/BufferGeometry)
+### Methods
+Extents THREE.BufferGeometry, see [BufferGeometry](https://threejs.org/docs/#api/en/core/BufferGeometry)
+## CylinderBufferGeometry(radius, height, radialSegments):
+JS3DAmmo.CylinderBufferGeometry(radius,height,radialSegments);
+### Parameters
+radius: Number, default:1,
+height: Number, default:1,
+radialSegments: Number, default: 8
+### Properties
+Extents THREE.BufferGeometry, see [BufferGeometry](https://threejs.org/docs/#api/en/core/BufferGeometry)
+### Methods
+Extents THREE.BufferGeometry, see [BufferGeometry](https://threejs.org/docs/#api/en/core/BufferGeometry)
+## ConeBufferGeometry(radius, height, widthSegments):
+JS3DAmmo.ConeBufferGeometry(radius,height,widthSegments);
+### Parameters
+radius: Number, default:1,
+height: Number, default:1,
+widthSegments: Number, default: 8
+### Properties
+Extents THREE.BufferGeometry, see [BufferGeometry](https://threejs.org/docs/#api/en/core/BufferGeometry)
+### Methods
+Extents THREE.BufferGeometry, see [BufferGeometry](https://threejs.org/docs/#api/en/core/BufferGeometry)
 ## Vector3
 JS3DAmmo.Vector3(x, y, z);
 ### Parameters
@@ -57,8 +94,8 @@ returns a new vector with the same x, y, and z values as this one
 #### isEqualTo(v): Boolean
 checks if vector v is exactly the same as this vector
 
-#### directionTo(v): Vector3
-returns a normalized Vector3 pointing in the direction from this vector, to the other one. because of a small bug, you have to do .invert() to get the actual direction
+#### directionTo(v1,v2): Vector3
+makes this Vector3 be one pointing in the direction from v1 to v2
 
 #### isAlmostEqualTo(v, delta): Boolean
 checks if v is almost equal to this vector within a difference of delta
@@ -247,6 +284,17 @@ heightSegments: Number, default: 4,
 material: THREE.Material, default: THREE.MeshBasicMaterial
 }
 
+## ShapeImpostor
+JS3DAmmo.ShapeImpostor(parameters)  
+### parameters
+parameters:{  
+geometry: THREE.BufferGeometry  
+shapeOptions:{  
+shapeType: Number, see JS3DAmmo.ENUMS.SHAPES,  
+other options are available depending on which shape you use. Once again, see JS3DAmmo.ENUMS.SHAPES for more details  
+}  
+material: THREE.Material, default THREE.MeshBasicMaterial()  
+}
 ## CharacterController
 JS3DAmmo.CharacterController(parameters)
 ### parameters

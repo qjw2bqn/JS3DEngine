@@ -3,13 +3,25 @@
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.JS3DAmmo = {}));
 }(this,  (function (exports) { 
-/**
- * 
- * @param {Number} x 
- * @param {Number} y 
- * @param {Number} z 
- */
-
+let ENUMS = {};
+Object.defineProperty(ENUMS,'SHAPES',{value:{}});
+Object.defineProperties(ENUMS.SHAPES,{
+    BoxImpostor:{
+        value:0
+    },
+    SphereImpostor:{
+        value:1
+    },
+    CylinderImpostor:{
+        value:2
+    },
+    ConeImpostor:{
+        value:4
+    },
+    CapsuleImpostor:{
+        value:8
+    }
+})
 class BufferGeometryUtils {
 
 	static computeTangents( geometry ) {
@@ -996,9 +1008,9 @@ class CapsuleBufferGeometry extends THREE.BufferGeometry{
 		// build geometry
 
 		this.setIndex( indices );
-		this.addAttribute( 'position', vertices );
-		this.addAttribute( 'normal', normals );
-		this.addAttribute( 'uv', uvs );
+		this.setAttribute( 'position', vertices );
+		this.setAttribute( 'normal', normals );
+		this.setAttribute( 'uv', uvs );
 
 		// helper functions
 
@@ -1212,6 +1224,324 @@ class CapsuleBufferGeometry extends THREE.BufferGeometry{
     }
 }
 THREE.CapsuleBufferGeometry = CapsuleBufferGeometry;
+class BoxBufferGeometry extends THREE.BufferGeometry{
+    constructor(width = 1, height = 1, depth = 1){
+    super();
+    this.parameters = {
+        width:width,
+        height:height,
+        depth:depth
+    }
+    let w2 = width/2,h2 = height/2,d2 = depth/2;
+    let pts = new Float32Array([
+         w2,-h2, d2,
+         w2, h2, d2,
+         w2, h2,-d2,
+         w2,-h2,-d2,
+        -w2,-h2, d2,
+        -w2, h2, d2,
+        -w2, h2,-d2,
+        -w2,-h2,-d2,
+        -w2, h2, d2,
+        -w2, h2,-d2,
+         w2, h2,-d2,
+         w2, h2, d2,
+        -w2,-h2, d2,
+        -w2,-h2,-d2,
+         w2,-h2,-d2,
+         w2,-h2, d2,
+        -w2,-h2, d2,
+        -w2, h2, d2,
+         w2, h2, d2,
+         w2,-h2, d2,
+        -w2,-h2,-d2,
+        -w2, h2,-d2,
+         w2, h2,-d2,
+         w2,-h2,-d2
+     ]);
+     let ind = new Uint16Array([
+        2,1,0,
+        3,2,0,
+        4,5,6,
+        6,7,4,
+        10,9,8,
+        8,11,10,
+        12,13,14,
+        14,15,12,
+        18,17,16,
+        16,19,18,
+        20,21,22,
+        22,23,20
+    ]);
+    let uvs = new Float32Array([
+        0,0,
+        1,0,
+        1,1,
+        0,1,
+        0,0,
+        1,0,
+        1,1,
+        0,1,
+        0,0,
+        1,0,
+        1,1,
+        0,1,
+        0,0,
+        1,0,
+        1,1,
+        0,1,
+        0,0,
+        1,0,
+        1,1,
+        0,1,
+        0,0,
+        1,0,
+        1,1,
+        0,1
+    ])
+    let normals = new Float32Array(pts);
+    this.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+    this.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
+    this.normalizeNormals();
+    this.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));
+    this.setIndex(new THREE.Uint16BufferAttribute(ind,1));
+    this.addGroup(0,6,0);
+    this.addGroup(6,6,1);
+    this.addGroup(12,6,2);
+    this.addGroup(18,6,3);
+    this.addGroup(24,6,4);
+    this.addGroup(30,6,5);
+    }
+}
+class ConeBufferGeometry extends THREE.BufferGeometry{
+    constructor(radius = 1,height = 1,widthSegments = 8){
+        super();
+        widthSegments = Math.floor(Math.max(widthSegments,3))
+        this.parameters = {
+            radius:radius,
+            height:height,
+            widthSegments:widthSegments
+        }
+        let positions = [0,height/2,0,0,-height/2,0];
+        let normals = [0,1,0,0,-1,0];
+        let index = [];
+        let indTyp2 = [];
+        let point = new THREE.Vector3();
+        for(var x = 0,ind = 2;x<=widthSegments+2;x++,ind++){
+            let xVpt = Math.cos(x*(2*Math.PI/widthSegments))*radius;
+            let zVpt = Math.sin(x*(2*Math.PI/widthSegments))*radius;
+            point.set(xVpt,-height/2,zVpt);
+            positions[ind*3] = point.x;
+            positions[ind*3+1] = point.y;
+            positions[ind*3+2] = point.z;
+            point.normalize();
+            normals[ind*3] = point.x;
+            normals[ind*3+1] = point.y;
+            normals[ind*3+2] = point.z;
+            if(ind<=2){
+    
+            }else if(ind==widthSegments+2){
+                index.push(ind-1,0,2);
+            }else{
+                index.push(ind-1,0,ind);
+            }
+        }
+        let oI = positions.length/3;
+        for(var x = 0,ind = oI*1;x<=widthSegments+2;x++,ind++){
+            let xVpt = Math.cos(x*(2*Math.PI/widthSegments))*radius;
+            let zVpt = Math.sin(x*(2*Math.PI/widthSegments))*radius;
+            point.set(xVpt,-height/2,zVpt);
+            positions[ind*3] = point.x;
+            positions[ind*3+1] = point.y;
+            positions[ind*3+2] = point.z;
+            point.normalize();
+            normals[ind*3] = point.x;
+            normals[ind*3+1] = point.y;
+            normals[ind*3+2] = point.z;
+            if(x<=2){
+    
+            }else{
+                indTyp2.push(ind,1,ind-1);
+            }
+        }
+        let oL = index.length*1;
+        index = index.concat(indTyp2);
+        this.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(positions),3))
+        this.setAttribute('normal',new THREE.Float32BufferAttribute(new Float32Array(normals),3));
+        this.setIndex(new THREE.Uint16BufferAttribute(new Uint16Array(index),1));
+        this.addGroup(0,oL,0);
+        this.addGroup(oL,indTyp2.length,1);
+    }
+}
+class CylinderBufferGeometry extends THREE.BufferGeometry{
+    constructor(radius = 1, height = 1, radialSegments = 8){
+        super();
+        radialSegments = Math.floor(Math.max(radialSegments,3));
+        this.parameters = {
+            radius:radius,
+            height:height,
+            radialSegments:radialSegments
+        }
+        let positions = [];
+        let normals = [];
+        let uvs = [];
+        let index = [];
+        let indTop = [];
+        let indBot = [];
+        let vec = new THREE.Vector3();
+        for(var x = 0,lowerInd = 0,upperInd = 1;x<radialSegments+2;x++,lowerInd+=2,upperInd+=2){
+            let xV = Math.cos(x*(2*Math.PI/radialSegments))*radius;
+            let zV = Math.sin(x*(2*Math.PI/radialSegments))*radius;
+            vec.set(xV,height/2,zV);
+            positions[lowerInd*3] = vec.x;
+            positions[lowerInd*3+1] = vec.y;
+            positions[lowerInd*3+2] = vec.z;
+            vec.normalize();
+            normals[lowerInd*3] = vec.x;
+            normals[lowerInd*3+1] = vec.y;
+            normals[lowerInd*3+2] = vec.z;
+            vec.set(xV,-height/2,zV);
+            positions[upperInd*3] = vec.x;
+            positions[upperInd*3+1] = vec.y;
+            positions[upperInd*3+2] = vec.z;
+            vec.normalize();
+            normals[upperInd*3] = vec.x;
+            normals[upperInd*3+1] = vec.y;
+            normals[upperInd*3+2] = vec.z;
+            let u = x/radialSegments;
+            let v = 0;
+            let v2 = 1;
+            uvs.push(u,v,u,v2);
+            if(x==radialSegments){
+                index.push(upperInd-2,lowerInd-2,1);
+                index.push(lowerInd-2,0,1);
+            }else if(x>0){
+                index.push(lowerInd-2,lowerInd,upperInd-2);
+                index.push(lowerInd,upperInd,upperInd-2);
+            }
+        };
+        positions.push(0,height/2,0);
+        positions.push(0,-height/2,0);
+        normals.push(0,1,0);
+        normals.push(0,-1,0);
+        let oL = parseInt(positions.length.toString(),10)/3;
+        for(var x = 0,lowerInd = oL,upperInd = oL+1;x<=radialSegments+1;x++,lowerInd+=2,upperInd+=2){
+            let xV = Math.cos(x*2*Math.PI/radialSegments)*radius;
+            let zV = Math.sin(x*2*Math.PI/radialSegments)*radius;
+            let yV = height/2;
+            let y2V = -height/2;
+            positions.push(xV,yV,zV);
+            positions.push(xV,y2V,zV);
+            let l =Math.sqrt( xV**2+yV**2+zV**2);
+            normals.push(xV*(1/l),yV*(1/l),zV*(1/l));
+            normals.push(xV*(1/l),y2V*(1/l),zV*(1/l));
+            let u = Math.cos(x*(2*Math.PI/radialSegments))*0.5+0.5;
+            let v = Math.sin(x*(2*Math.PI/radialSegments))*0.5+0.5;
+            uvs.push(u,v,u,v);
+            if(x==radialSegments){
+                indTop.push(lowerInd-2,oL-2,0);
+                indBot.push(1,oL-1,upperInd-2);
+            }else if(x>0){
+                indBot.push(upperInd,oL-1,upperInd-2);
+                indTop.push(lowerInd-2,oL-2,lowerInd);
+            }
+        }
+        index = index.concat(indTop,indBot);
+        this.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(positions),3));
+        this.setAttribute('normal',new THREE.Float32BufferAttribute(new Float32Array(normals),3));
+        this.setAttribute('uv',new THREE.Float32BufferAttribute(new Float32Array(uvs),2));
+        this.setIndex(new THREE.Uint16BufferAttribute(new Uint16Array(index),1));
+        this.addGroup(0,oL*3-9,0);
+        this.addGroup(oL*3-9,indTop.length-3,1);
+        this.addGroup(oL*3+indTop.length-9,indBot.length+6,2);}
+}
+
+class FirstPersonDragControls{
+    constructor(camera,domElement){
+        this.object = camera;
+        this.domElement = domElement;
+        this.rotateSpeed = 1;
+        this.maxPolarAngle = Math.PI/2;
+        this.minPolarAngle = -Math.PI/2;
+        this.maxAzimuthAngle = Infinity;
+        this.minAzimuthAngle = -Infinity;
+        let prevPos = {
+            x:0,
+            y:0
+        }
+        let moveAmt = {        
+            x:0,
+            y:0
+        }
+        let currentPos = {
+            x:0,
+            y:0
+        }
+        let clicked = false;
+        let cam = this.object;
+        cam.rotation.order = 'YXZ';
+        let t = this;
+        this.domElement.onmousedown = function(){
+            clicked = true;
+            prevPos.x = event.pageX;
+            prevPos.y = event.pageY;
+        }
+        this.domElement.onmouseup = function(){
+            clicked = false;
+        }
+        this.domElement.onmousemove = function(){
+            if(clicked){
+                currentPos.x = event.pageX;
+                currentPos.y = event.pageY;
+                moveAmt.x = currentPos.x-prevPos.x;
+                moveAmt.y = currentPos.y-prevPos.y;
+                cam.rotation.y-=moveAmt.x/120*t.rotateSpeed;
+                cam.rotation.x+=moveAmt.y/120*t.rotateSpeed;
+                if(cam.rotation.x<t.minPolarAngle){
+                    cam.rotation.x = t.minPolarAngle;
+                }
+                if(cam.rotation.x>t.maxPolarAngle){
+                    cam.rotation.x = t.maxPolarAngle;
+                }
+                if(cam.rotation.y<t.minAzimuthAngle){
+                    cam.rotation.y = t.minAzimuthAngle;
+                }
+                if(cam.rotation.y>t.maxAzimuthAngle){
+                    cam.rotation.y = t.maxAzimuthAngle;
+                }
+                prevPos.x = currentPos.x;
+                prevPos.y = currentPos.y;
+            }
+        }
+    }
+    forward(distance){
+        let v = new THREE.Vector3();
+        this.object.getWorldDirection(v);
+        this.object.position.addScaledVector(v,distance);
+    }
+    backward(distance){
+        let v = new THREE.Vector3();
+        this.object.getWorldDirection(v);
+        this.object.position.addScaledVector(v,-distance);
+    }
+    left(distance){
+        let v = new THREE.Vector3();
+        this.object.getWorldDirection(v);
+        let r = new THREE.Vector3(0,1,0);
+        r.applyQuaternion(this.object.quaternion);
+        v.applyAxisAngle(r,Math.PI/2);
+        this.object.position.addScaledVector(v,distance);
+    }
+    right(distance){
+        let v = new THREE.Vector3();
+        this.object.getWorldDirection(v);
+        let r = new THREE.Vector3(0,1,0);
+        r.applyQuaternion(this.object.quaternion);
+        v.applyAxisAngle(r,Math.PI/2);
+        this.object.position.addScaledVector(v,-distance);
+    }
+}
+
 class Vector3{
     /**
      * 
@@ -1457,6 +1787,11 @@ class RigidBody{
         this.debugBody;
         this.physicsBody;
     }
+    setShadows(cast = true,receive = true){
+        this.mesh.castShadow = cast;
+        this.mesh.receiveShadow = receive;
+        return this;
+    }
 }
 /**
  * 
@@ -1516,7 +1851,7 @@ class World{
             console.error('JS3D.World: World.add should have an argument');
             return false;
         }
-        if(!(body instanceof Body||body instanceof Character||body instanceof InfPlane||body instanceof CompoundBody)){
+        if(!body instanceof RigidBody){
             console.error("JS3D.World: World.add's argument should be a JS3D.Body");
             return false;
         }
@@ -1632,7 +1967,7 @@ class World{
                 }
                 if(!this.bodies[x].gravityAffected){
                     let m = this.bodies[x].mass;
-                    world.bodies[x].physicsBody.applyCentralForce(new Ammo.btVector3(this.gravity.x*-m,this.gravity.y*-m,this.gravity.z*-m));
+                    this.bodies[x].physicsBody.applyCentralForce(new Ammo.btVector3(this.gravity.x*-m,this.gravity.y*-m,this.gravity.z*-m));
                 }
                 if(this.telePortPlane!=undefined){
                     if(p.y()<this.telePortPlane.yValue){
@@ -1809,8 +2144,11 @@ class InfPlane extends RigidBody{
      * @param {Vector3} parameters.normal
      * @param {Number} parameters.distance
      * @param {THREE.Material} parameters.material
+     * @param {Number} parameters.meshWidth
+     * @param {Number} parameters.meshHeight
      */
     constructor(parameters){
+        super();
         parameters = parameters||{};
         let normal = parameters.normal||new Vector3(0,1,0);
         let distance = parameters.distance||1;
@@ -1826,7 +2164,7 @@ class InfPlane extends RigidBody{
         iPlaneBodyS.calculateLocalInertia(0,lI);
         let iPrbInfo = new Ammo.btRigidBodyConstructionInfo(0,new Ammo.btDefaultMotionState(iPT),iPlaneBodyS,lI);
         this.physicsBody = new Ammo.btRigidBody(iPrbInfo);
-        let dG = new THREE.PlaneBufferGeometry(50,50,15,15);
+        let dG = new THREE.PlaneBufferGeometry(parameters.meshWidth||50,parameters.meshHeight||50,15,15);
         let aQ = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1),tN.normalize());
         dG.applyMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(aQ));
         tN.multiplyScalar(distance);
@@ -1903,16 +2241,36 @@ class BoxShape extends Shape{
      * @param {Object} parameters 
      * @param {Vector3} [parameters.halfExtents]
      * @param {THREE.Material} [parameters.material]
+     * @param {Boolean} [parameters.flatShading]
+     * @param {BoxBufferGeometry|THREE.BoxBufferGeometry} [parameters.geometry]
      */
     constructor(parameters){
         super();
-        this.type = 'Box';
         parameters = parameters||{};
         let halfExtents = parameters.halfExtents||new Vector3(0.5,0.5,0.5);
+        let geom = parameters.geometry;
+        let fs;
+        if(parameters.flatShading==undefined){
+            fs = true;
+        }else{
+            fs = parameters.flatShading;
+        }
+        let w2 = halfExtents.x,h2 = halfExtents.y,d2 = halfExtents.z;
+        if(geom!=undefined){
+            w2 = geom.parameters.width/2;
+            h2 = geom.parameters.height/2;
+            d2 = geom.parameters.depth/2;
+            this.geometry = geom;
+        }else{
+            this.geometry = new BoxBufferGeometry(w2*2,h2*2,d2*2);
+        }
         this.material = parameters.material||new THREE.MeshBasicMaterial();
-        this.physicsBodyShape = new Ammo.btBoxShape(new Ammo.btVector3(halfExtents.x,halfExtents.y,halfExtents.z));
+        if(this.material.flatShading!=undefined){
+            this.material.flatShading = fs;
+            this.material.needsUpdate = true;
+        }
+        this.physicsBodyShape = new Ammo.btBoxShape(new Ammo.btVector3(w2,h2,d2));
         this.physicsBodyShape.setMargin(0.05);
-        this.geometry = new THREE.BoxBufferGeometry(halfExtents.x*2,halfExtents.y*2,halfExtents.z*2);
     }
 }
 class SphereShape extends Shape{
@@ -1924,7 +2282,6 @@ class SphereShape extends Shape{
     */
    constructor(parameters){
        super();
-       this.type = 'Sphere';
         parameters = parameters||{};
         this.geometry = parameters.geometry||new THREE.SphereBufferGeometry();
         this.material = parameters.material||new THREE.MeshBasicMaterial();
@@ -1937,16 +2294,31 @@ class CylinderShape extends Shape{
     /**
      * 
      * @param {Object} parameters 
-     * @param {THREE.CylinderBufferGeometry} [parameters.geometery]
+     * @param {THREE.CylinderBufferGeometry} [parameters.geometry]
      * @param {THREE.Material} [parameters.material]
+     * @param {Object} [parameters.cylinderOptions]
+     * @param {Number} [parameters.cylinderOptions.height]
+     * @param {Number} [parameters.cylinderOptions.radius]
+     * @param {Number} [parameters.cylinderOptions.radialSegments]
      */
     constructor(parameters){
         super();
         parameters = parameters||{};
-        this.type = 'Cylinder';
-        this.geometry = parameters.geometry||new THREE.CylinderBufferGeometry();
+        let geom = parameters.geometry;
+        let cylOptions = parameters.cylinderOptions;
+        if(geom!=undefined){
+
+        }else{
+            if(cylOptions!=undefined){
+                geom = new CylinderBufferGeometry(cylOptions.radius,cylOptions.height,cylOptions.radialSegments);
+            }else{
+                geom = new CylinderBufferGeometry();
+            }
+        }
+        this.geometry = geom;
+        // this.geometry = parameters.geometry||new CylinderBufferGeometry()
         this.material = parameters.material||new THREE.MeshBasicMaterial();
-        this.physicsBodyShape = new Ammo.btCylinderShape(new Ammo.btVector3(this.geometry.parameters.radiusTop,this.geometry.parameters.height/2,this.geometry.parameters.radiusTop));
+        this.physicsBodyShape = new Ammo.btCylinderShape(new Ammo.btVector3(this.geometry.parameters.radiusTop||this.geometry.parameters.radius,this.geometry.parameters.height/2,this.geometry.parameters.radiusTop||this.geometry.parameters.radius));
         this.physicsBodyShape.setMargin(0.05);
     }
 }
@@ -1955,7 +2327,7 @@ class Trimesh extends Shape{
      * 
      * @param {Object} parameters 
      * @param {THREE.Material} [parameters.material]
-     * @param {THREE.BufferGeometry} parameters.geometery
+     * @param {THREE.BufferGeometry} parameters.geometry
      * @param {Boolean} [parameters.dynamic]
      */
     constructor(parameters){
@@ -1992,14 +2364,29 @@ class ConeShape extends Shape{
     /**
      * 
      * @param {Object} parameters 
-     * @param {THREE.ConeBufferGeometry} [parameters.geometery]
+     * @param {THREE.ConeBufferGeometry} [parameters.geometry]
      * @param {THREE.Material} [parameters.material]
+     * @param {Object} [parameters.coneOptions]
+     * @param {Number} [parameters.coneOptions.height]
+     * @param {Number} [parameters.coneOptions.radius]
+     * @param {Number} [parameters.coneOptions.radialSegments]
      */
     constructor(parameters){
         super();
         parameters = parameters||{};
         this.material = parameters.material||new THREE.MeshBasicMaterial();
-        this.geometry = parameters.geometry||new THREE.ConeBufferGeometry();
+        let geometry = parameters.geometry;
+        let cOps = parameters.coneOptions;
+        if(geometry!=undefined){
+
+        }else{
+            if(cOps!=undefined){
+                geometry = new ConeBufferGeometry(cOps.radius,cOps.height,cOps.widthSegments);
+            }else{
+                geometry = new ConeBufferGeometry()
+            }
+        }
+        this.geometry = geometry;
         this.physicsBodyShape = new Ammo.btConeShape(this.geometry.parameters.radius,this.geometry.parameters.height);
         this.physicsBodyShape.setMargin(0.05);
     }
@@ -2021,10 +2408,15 @@ class Plane extends Shape{
         let height = parameters.height||10;
         let widthSegs = parameters.widthSegments||1;
         let heightSegs = parameters.heightSegments||1;
-        let build = new Ammo.btTriangleMesh();
-        build.addTriangle(new Ammo.btVector3(-width/2,0,-height/2),new Ammo.btVector3(-width/2,0,height/2),new Ammo.btVector3(width/2,0,height/2));
-        build.addTriangle(new Ammo.btVector3(-width/2,0,-height/2),new Ammo.btVector3(width/2,0,-height/2),new Ammo.btVector3(width/2,0,height/2));
-        this.physicsBodyShape = new Ammo.btBvhTriangleMeshShape(build,true);
+        this.physicsBodyShape = new Ammo.btConvexHullShape();
+        let p = new Ammo.btVector3(-width/2,0,-height/2);
+        this.physicsBodyShape.addPoint(p);
+        p.setValue(-width/2,0,height/2);
+        this.physicsBodyShape.addPoint(p);
+        p.setValue(height/2,0,height/2);
+        this.physicsBodyShape.addPoint(p);
+        p.setValue(height/2,0,-height/2);
+        this.physicsBodyShape.addPoint(p);
         this.physicsBodyShape.setMargin(0.05);
         this.material = parameters.material||new THREE.MeshBasicMaterial({side:THREE.DoubleSide});
         this.geometry = new THREE.PlaneBufferGeometry(width,height,widthSegs,heightSegs);
@@ -2061,21 +2453,23 @@ class HeightFeild extends Shape{
             Ammo.HEAPF32[(ptr>>2)+f] = heightData[f];
         }
         this.physicsBodyShape = new Ammo.btHeightfieldTerrainShape(width,height,ptr,1,minHeight,maxHeight,1,0,flipQuatEdges);
-        this.physicsBodyShape.setLocalScaling(new Ammo.btVector3(elemSize,1,elemSize));
-        let geo = new THREE.PlaneBufferGeometry(width*elemSize,height*elemSize,width-1,height-1);
+        this.physicsBodyShape.setLocalScaling(new Ammo.btVector3(elemSize,elemSize,elemSize));
+        let geo = new THREE.PlaneBufferGeometry(width,height,width-1,height-1);
         geo.rotateX(-Math.PI/2);
         let pts = geo.attributes.position.array;
         for ( var i = 0, j = 0, l = pts.length; i < l; i ++, j += 3 ) {
             // j + 1 because it is the y component that we modify
             pts[ j + 1 ] = heightData[ i ];
         }
+        geo.translate(0,-(maxHeight+minHeight)/2,0);
         geo.computeVertexNormals();
         geo.computeFaceNormals();
+        geo.scale(elemSize,elemSize,elemSize);
         this.geometry = geo;
         this.material = parameters.material||new THREE.MeshBasicMaterial();
     }
 }
-class ConvexPolyhedronShape extends Shape{
+class ConvexPolyhedron extends Shape{
     /**
      * 
      * @param {Object} parameters
@@ -2126,6 +2520,98 @@ class CapsuleShape extends Shape{
         this.geometry = new CapsuleBufferGeometry(rad,rad,height,widthSegments,1,heightSegments,heightSegments);
         this.material = material;
         this.physicsBodyShape = new Ammo.btCapsuleShape(rad,height);
+        this.physicsBodyShape.setMargin(0.05);
+    }
+}
+class ShapeImpostor extends Shape{
+    /**
+     * 
+     * @param {Object} parameters
+     * @param {THREE.BufferGeometry} parameters.geometry 
+     * @param {Object} parameters.shapeOptions
+     * @param {Number} parameters.shapeOptions.shapeType 
+     * @param {THREE.Material} [parameters.material] 
+     */
+    constructor(parameters){
+        super();
+        parameters = parameters||{};
+        this.geometry = parameters.geometry;
+        if(this.geometry==undefined){
+            console.error("JS3D.ShapeImpostor: must input a geometry");
+            return;
+        };
+        let shapeOpts = parameters.shapeOptions;
+        if(shapeOpts==undefined||!shapeOpts instanceof Object){
+            console.error('JS3D.ShapeImpostor: must input an object of physicsBody shape options');
+            return;
+        }
+        this.material = parameters.material||new THREE.MeshBasicMaterial();
+        let r,h,he;
+        switch(shapeOpts.shapeType){
+            case ENUMS.SHAPES.BoxImpostor:
+                he = shapeOpts.halfExtents;
+                if(he==undefined){
+                    console.error('JS3D.ShapeImpostor: BoxImpostor shape type must have a half extents vector');
+                    return;
+                }
+                this.physicsBodyShape = new Ammo.btBoxShape(new Ammo.btVector3(he.x,he.y,he.z));
+                this.debugBody = new THREE.Mesh(new BoxBufferGeometry(he.x*2,he.y*2,he.z*2),new THREE.MeshBasicMaterial({color:0x00ff00,wireframe:true}));
+                break;
+            case ENUMS.SHAPES.SphereImpostor:
+                r = shapeOpts.radius;
+                if(r==undefined){
+                    console.error('JS3D.ShapeImpostor: SphereImpostor shape type must have a radius');
+                    return;
+                }
+                this.physicsBodyShape = new Ammo.btSphereShape(r);
+                this.debugBody = new THREE.Mesh(new THREE.SphereBufferGeometry(r),new THREE.MeshBasicMaterial({color:0x00ff00,wireframe:true}));
+                break;
+            case ENUMS.SHAPES.CylinderImpostor:
+                r = shapeOpts.radius;
+                h = shapeOpts.height;
+                if(r==undefined){
+                    console.error('JS3D.ShapeImpostor: CylinderImpostor shape must have a radius');
+                    return;
+                }
+                if(h==undefined){
+                    console.error('JS3D.ShapeImpostor: CylinderImpostor shape must have a height');
+                    return;
+                }
+                this.physicsBodyShape = new Ammo.btCylinderShape(new Ammo.btVector3(r,h/2,r));
+                this.debugBody = new THREE.Mesh(new THREE.CylinderBufferGeometry(r,r,h),new THREE.MeshBasicMaterial({color:0x00ff00,wireframe:true}));
+                break;
+            case ENUMS.SHAPES.ConeImpostor:
+                r = shapeOpts.radius;
+                h = shapeOpts.height;
+                if(r==undefined){
+                    console.error('JS3D.ShapeImpostor: ConeImpostor shape must have a radius');
+                    return;
+                }
+                if(h==undefined){
+                    console.error('JS3D.ShapeImpostor: ConeImpostor shape must have a height');
+                    return;
+                }
+                this.physicsBodyShape = new Ammo.btConeShape(r,h);
+                this.debugBody = new THREE.Mesh(new ConeBufferGeometry(r,h),new THREE.MeshBasicMaterial({color:0x00ff00,wireframe:true}));
+                break;
+            case ENUMS.SHAPES.CapsuleImpostor:
+                r = shapeOpts.radius;
+                h = shapeOpts.height;
+                if(r==undefined){
+                    console.error('JS3D.ShapeImpostor: CapsuleImpostor shape must have a radius');
+                    return;
+                }
+                if(h==undefined){
+                    console.error('JS3D.ShapeImpostor: CapsuleImpostor shape must have a height');
+                    return;
+                }
+                this.physicsBodyShape = new Ammo.btCapsuleShape(r,h);
+                this.debugBody = new THREE.Mesh(new CapsuleBufferGeometry(r,r,h,12,1,3,3),new THREE.MeshBasicMaterial({color:0x00ff00,wireframe:true}));
+                break;
+            default:
+                console.error('JS3D.ShapeImpostor: the inputted shape type is not one that is recognised.');
+                return;
+        }
         this.physicsBodyShape.setMargin(0.05);
     }
 }
@@ -2230,7 +2716,15 @@ class CharacterController{
         this.moveSpeed = parameters.moveSpeed||10;
         this.fixedCam = parameters.fixedCam||false;
         this.firstPerson = parameters.firstPerson||false;
-        this.cameraYOffset = parameters.yOffset||this.character.physicsBodyShape.getHalfHeight();
+        if(!this.fixedCam&&this.firstPerson){
+            if(this.character instanceof Body){
+                this.cameraYOffset = parameters.yOffset||0;
+            }else{
+                this.cameraYOffset = parameters.yOffset||this.character.physicsShape.getHalfHeight();
+            }
+        }else{
+            this.cameraYOffset = 0;
+        }
         if(this.character == undefined||!(this.character instanceof Body||this.character instanceof Character)){
             console.error("JS3D.CharacterController: Must have a JS3D.Character or JS3D.Body type");
             return false;
@@ -2285,7 +2779,7 @@ class CharacterController{
      * @param {Number} rightCode
      * @param {Number} leftCode
      */
-    moveDirUpdateSta(keyCode,forCode,backCode,leftCode,rightCode){
+    moveDirUpdateStart(keyCode,forCode,backCode,leftCode,rightCode){
         if(keyCode==forCode){
             this.moveDir.forward = true;
         }
@@ -2306,7 +2800,7 @@ class CharacterController{
      * @param {Number} rightCode
      * @param {Number} leftCode
      */
-    moveDirUpdateSto(keyCode,forCode,backCode,leftCode,rightCode){
+    moveDirUpdateStop(keyCode,forCode,backCode,leftCode,rightCode){
         if(keyCode==forCode){
             this.moveDir.forward = false;
         }
@@ -2361,23 +2855,81 @@ class CharacterController{
     
     }
 }
-exports.Vector3 = Vector3;
-exports.World = World;
-exports.Body = Body;
-exports.BoxShape = BoxShape;
-exports.SphereShape = SphereShape;
-exports.CylinderShape = CylinderShape;
-exports.ConeShape = ConeShape;
-exports.Trimesh = Trimesh;
-exports.Plane = Plane;
-exports.CapsuleShape = CapsuleShape;
-exports.InfPlane = InfPlane;
-exports.HeightFeild = HeightFeild;
-exports.ConvexPolyhedronShape = ConvexPolyhedronShape;
-exports.Character = Character;
-exports.CharacterController = CharacterController;
-exports.CompoundBody = CompoundBody;
-exports.BufferGeometryUtils = BufferGeometryUtils;
-exports.RigidBody = RigidBody;
-exports.Shape = Shape;
+Object.defineProperties(exports,{
+    ENUMS:{
+        value:ENUMS
+    },
+    Vector3:{
+        value:Vector3
+    },
+    FirstPersonDragControls:{
+        value:FirstPersonDragControls
+    },
+    World:{
+        value:World
+    },
+    Body:{
+        value:Body
+    },
+    BoxShape:{
+        value:BoxShape
+    },
+    SphereShape:{
+        value:SphereShape
+    },
+    CylinderShape:{
+        value:CylinderShape
+    },
+    ConeShape:{
+        value:ConeShape
+    },
+    Trimesh:{
+        value:Trimesh
+    },
+    Plane:{
+        value:Plane
+    },
+    CapsuleShape:{
+        value:CapsuleShape
+    },
+    InfPlane:{
+        value:InfPlane
+    },
+    HeightFeild:{
+        value:HeightFeild
+    },
+    ConvexPolyhedron:{
+        value:ConvexPolyhedron
+    },
+    ShapeImpostor:{
+        value:ShapeImpostor
+    },
+    Character:{
+        value:Character
+    },
+    CharacterController:{
+        value:CharacterController
+    },
+    CompoundBody:{
+        value:CompoundBody
+    },
+    BufferGeometryUtils:{
+        value:BufferGeometryUtils
+    },
+    BoxBufferGeometry:{
+        value:BoxBufferGeometry
+    },
+    CylinderBufferGeometry:{
+        value:CylinderBufferGeometry
+    },
+    ConeBufferGeometry:{
+        value:ConeBufferGeometry
+    },
+    RigidBody:{
+        value:RigidBody
+    },
+    Shape:{
+        value:Shape
+    }
+})
 })));

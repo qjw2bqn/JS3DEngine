@@ -62,6 +62,9 @@ subtracts v from this
 sets this vector to v1-v2
 
 #### lengthSq(): Number
+returns the squared length of this vector
+
+#### length(): Number
 returns the euclidean length of this vector
 
 #### manhattanLength(): Number
@@ -306,3 +309,20 @@ fixedCam: Boolean, default: false,
 firstPerson: Boolean, default:false,  
 yOffset: Number, default: 1/2 character height,  
 }
+## FirstPersonDragControls(camera, domElement)
+new JS3DAmmo.FirstPersonDragControls(camera, domElement);
+### parameters
+camera: THREE.Camera  
+domElement: HTMLElement
+### methods
+#### forward(distance: Number):
+moves the camera forward in the direction it is facing by the specified distance
+
+#### backward(distance:Number):
+moves the camera backward in the direction it is facing by the specified distance
+
+#### right(distance:Number):
+moves the camera right in the direction it is facing by the specified distance
+
+#### left(distance:Number):
+moves the camera left in the direction it is facing by the specified distance

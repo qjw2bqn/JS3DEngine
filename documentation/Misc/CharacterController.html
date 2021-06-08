@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CharacterController</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href='../style.css'>
+        <script src='../sidebar.js'></script>
+    </head>
+    <body>
+        <div class="sidebar"></div>
+        <div class="main">
+            <h1>CharacterController</h1>
+            <p>defines a way to move a character or body</p>
+            <h2>Code Example</h2>
+            <p class="code">
+                <span class="var">const</span> character = <span class="var">new</span> JS3DAmmo.<span class="mod">Character</span>({radius:1,height:2});<br>
+                <span class="var">const</span> camera = world.cameras[<span class="num">0</span>];<br>
+                <span class="var">const</span> characterController = <span class="var">new</span> JS3DAmmo.<span class="mod">CharacterController</span>({<br>
+                &nbsp;&nbsp;character:character,<br>
+                &nbsp;&nbsp;camera:camera<br>
+                })
+            </p>
+            <h2>Properties</h2>
+            <span class="mod">camera</span> - camera in which the controller calculates direction for movement<br>
+            <span class="mod">cameraYOffset</span> - if camera is in first person mode, the amount above the position of the character the camera is<br>
+            <span class="mod">character</span> - RigidBody for the character<br>
+            <span class="mod">firstPerson</span> - whether the character controller is first person or not<br>
+            <span class="mod">moveDir</span> - object with left, right, forward, backward, and ableJump booleans<br>
+            <span class="mod">moveSpeed</span> - speed of movement
+            <h2>Methods</h2>
+            <h3 class="show">forward(): <span class="type">void</span></h3>
+            <p>changes move dir for forward with respect to the camera</p>
+            <h3 class="show">backward(): <span class="type">void</span></h3>
+            <p>changes move dir for backward with respect to the camera</p>
+            <h3 class="show">left(): <span class="type">void</span></h3>
+            <p>changes move dir for left with respect to the camera</p>
+            <h3 class="show">right(): <span class="type">void</span></h3>
+            <p>changes move dir for right with respect to the camera</p>
+            <h3 class="show">updateMoveDirStart(keyCode: <span class="type">Integer</span>, forCode: <span class="type">Integer</span>, backCode: <span class="type">Integer</span>, rightCode: <span class="type">Integer</span>, leftCode: <span class="type">Integer</span>): <span class="type">void</span></h3>
+            <p>updates moveDir for starting</p>
+            <h3 class="show">updateMoveDirStop(keyCode: <span class="type">Integer</span>, forCode: <span class="type">Integer</span>, backCode: <span class="type">Integer</span>, rightCode: <span class="type">Integer</span>, leftCode: <span class="type">Integer</span>): <span class="type">void</span></h3>
+            <p>updates moveDir for stopping</p>
+            <h3 class="show">updatePosition(): <span class="type">void</span></h3>
+            <p>updates velocity and position for character</p>
+            <h3 class="show">jump(jumpVelocity: <span class="type">Float</span>): <span class="type">Float</span></h3>
+            <p>sets physics body y velocity to jump velocity</p>
+        </div>
+    </body>
+</html>

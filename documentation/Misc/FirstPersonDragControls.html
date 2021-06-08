@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FirstPersonGragControls</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href='../style.css'>
+        <script src='../sidebar.js'></script>
+    </head>
+    <body>
+        <div class="sidebar"></div>
+        <div class="main">
+            <h1>FirstPersonDragControls</h1>
+            <p>creats a controls type meant for if PointerLockControls doesn't work</p>
+            <h2>Code Example</h2>
+            <p class="code">
+                <span class="var">const</span> camera = world.cameras[<span class="num">0</span>];<br>
+                <span class="var">const</span> renderer = world.renderer;<br>
+                <span class="var">const</span> controls = <span class="var">new</span> JS3DAmmo.<span class="mod">FirstPersonDragControls</span>(camera,renderer.domElement);
+            </p>
+            <h2>Properties</h2>
+            <span class="mod">object</span> - object that has the rotation being applied to it<br>
+            <span class="mod">domElement</span> - HTMLElement for the event handlers<br>
+            <span class="mod">maxPolarAngle</span> - maximum polar angle of the object<br>
+            <span class="mod">minPolarAngle</span> - minimum polar angle of the object<br>
+            <span class="mod">maxAzimuthAngle</span> - maximum azimuthal angle of the object<br>
+            <span class="mod">minAzimuthAngle</span> - minimum azimuthal angle of the object<br>
+            <h2>methods</h2>
+            <h3 class="show">forward(distance: <span class="type">Float</span>): <span class="type">void</span></h3>
+            <p>moves the camera forward in the direction it is facing the specified amount</p>
+            <h3 class="show">backward(distance: <span class="type">Float</span>): <span class="type">void</span></h3>
+            <p>moves the backward forward in the direction it is facing the specified amount</p>
+            <h3 class="show">left(distance: <span class="type">Float</span>): <span class="type">void</span></h3>
+            <p>moves the camera left in the direction it is facing the specified amount</p>
+            <h3 class="show">right(distance: <span class="type">Float</span>): <span class="type">void</span></h3>
+            <p>moves the backward right in the direction it is facing the specified amount</p>
+        </div>
+    </body>
+</html>

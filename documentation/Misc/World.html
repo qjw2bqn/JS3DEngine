@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>World</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href='../style.css'>
+        <script src='../sidebar.js'></script>
+    </head>
+    <body>
+        <div class='sidebar'></div>
+        <div class='main'>
+            <h1>World</h1>
+            <p>Defines a physics world and scene and a few convinience methods for updating</p>
+            <h2>Code Example</h2>
+            <p class='code'>
+                <span class='var'>const</span> gravity = <span class='var'>new</span> JS3DAmmo.<span class='mod'>Vector3</span>(0, -10, 0);<br>
+                <span class='var'>const</span> backgroundColor = <span class='num'>0x8080ff</span>;<br>
+                <span class='var'>const</span> world = <span class='var'>new</span> JS3DAmmo.<span class='var'>World</span>({<br>
+                &nbsp;&nbsp;gravity:gravity,<br>
+                &nbsp;&nbsp;backgroundColor:backgroundColor<br>
+                })
+            </p>
+            <h2>Constructor</h2>
+            <h3 class='show'> new JS3DAmmo.World(parameters: <span class='type'>Object</span>)</h3>
+            <span class='mod'>parameters.gravity</span>: <span class='type'>Vector3</span> - gravity for the world, default: new Vector3(0,-9.8,0)<br>
+            <span class='mod'>parameters.backgroundColor</span>: <span class='type'>Number</span> - background color of the scene, default: 0<br>
+            <span class='mod'>parameters.target</span>: <span class='type'>HTMLElement</span> - target of the renderer, default: document.body<br>
+            <span class='mod'>parameters.rendererOptions</span>: <span class='type'>Object</span> - options inputted to the THREE.WebGLRenderer.
+            
+            <h2>Properties</h2>
+            <p>
+                <span class='mod'>_tmpTrans</span> - Temporary transform used to update meshed from physics engine<br>
+                <span class='mod'>aWorld</span> - Ammo.btDiscreteDynamicsWorld<br>
+                <span class='mod'>bodies</span> - array of JS3DAmmo RigidBodies to be updated. Check <a href='../RigidBodies/RigidBody.html'>RigidBody</a> for properties.<br>
+                <span class='mod'>cameras</span> - array of cameras that can be used to veiw the world from<br>
+                <span class='mod'>characterController</span> - holder for <a href='../Misc/CharacterController.html'>JS3DAmmo.CharacterContrller</a> to be updated in rendering loop<br>
+                <span class='mod'>debug</span> - whether or not to draw wireframes of shapes<br>
+                <span class='mod'>gravity</span> - gravity of the world<br>
+                <span class='mod'>kBodies</span> - array of kinematic bodies to be updated in the draw loop<br>
+                <span class='mod'>removeDistance</span> - whether or not to remove physics bodies from the world if they are a certain distance away from the camera<br>
+                <span class='mod'>removeMeshes</span> - wheter or not to remove meshes as well<br>
+                <span class='mod'>rederer</span> - <a href='https://threejs.org/docs/#api/en/renderers/WebGLRenderer'>THREE.WebGLRenderer</a><br>
+                <span class='mod'>scene</span> - <a href='https://threejs.org/docs/#api/en/scenes/Scene'>THREE.Scene</a><br>
+                <span class='mod'>veiw</span> - zero-indexed number for which camera to render from
+            </p>
+            <h2>Methods</h2>
+            <p>
+                <h3 class='show'>add(body: <span class='type'>RigidBody</span>): <span class='type'>void</span></h3>
+                <p>adds a body to the scene, physicsWorld, and bodies array to allow for updating</p>
+                <h3 class='show'>addCamera(camera: <span class='type'>THREE.Camera</span>): <span class='type'>void</span></h3>
+                <p>adds a camera to the camera array</p>
+                <h3 class='show'>addKinematicBody(kBody: <span class='type'>RigidBody</span>): <span class='type'>void</span></h3>
+                <p>adds a kinematic body to the scene, physicsWorld, and kBodies array</p>
+                <h3 class='show'>remove(body: <span class='type'>RigidBody</span>): <span class='type'>void</span></h3>
+                <p>removes a body from the scene, physicsWorld, and bodies array. Kinematic removal coming soon</p>
+                <h3 class='show'>resizeVeiwingWindow(): <span class='type'>void</span></h3>
+                <p>resizes renderer, and all cameras in camera array</p>
+                <h3 class='show'>setTeleportPlane(yV: <span class='type'>Float</span>, onTeleport: <span class='type'>Function</span>): <span class='type'>void</span></h3>
+                <p>sets a teleportation plane at the specified y-value (yV) and runs the onTeleport function with the body below the value as the parameter</p>
+                <h3 class='show'>update(dt: <span class='type'>Float</span>): <span class='type'>void</span></h3>
+                <p>updates the physics world with inputted delta time (dt)</p>
+            </p>
+        </div>
+    </body>
+</html>

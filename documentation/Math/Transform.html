@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Transform</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href='../style.css'>
+        <script src='../sidebar.js'></script>
+    </head>
+    <body>
+        <div class='sidebar'></div>
+        <div class='main'>
+            <h1>Transform</h1>
+            <p>Defines a Transform. Holder for a position and rotation</p>
+            <h2>Code Example</h2>
+            <p class='code'>
+                    <span class='var'>const</span> position =  <span class='var'>new</span> JS3DAmmo.<span class='mod'>Vector3</span>(0, 0, 0);<br>
+                    <span class='var'>const</span> rotation =  <span class='var'>new</span> JS3DAmmo.<span class='mod'>Quaternion</span>(0, 0, 0, 1);<br>
+                    <span class='var'>const</span> transform =  <span class='var'>new</span> JS3DAmmo.<span class='mod'>Transform</span>(position, rotation);
+            </p>
+            <h2>Properties</h2>
+            <span class='mod'>position</span> - position of the transform<br>
+            <span class="mod">rotation</span> - rotation of the transform
+            <h2>Methods</h2>
+            <p>see <a href='../Math/Vector3.html'>Vector3</a> and <a href='../Math/Quaternion.html'>Quaternion</a> for derived properties</p>
+            <h3 class='show'>clone(): <span class='type'>Transform</span></h3>
+            <p>creates a new transform with the same position and rotation as this one</p>
+            <h3 class='show'>copy(t: <span class='type'>Transform</span>): <span class='type'>this</span></h3>
+            <p>copies transform t's position and rotation to this</p>
+            <h3 class='show'>normalize(rotation: <span class='type'>Boolean</span>, position: <span class='type'>Boolean</span>): <span class='type'>this</span></h3>
+            <p>normalizes rotation and/or position depending on what was inputted</p>
+            <h3 class='show'>set(px: <span class='type'>Float</span>, py: <span class='type'>Float</span>, pz: <span class='type'>Float</span>, qx: <span class='type'>Float</span>, qy: <span class='type'>Float</span>, qz: <span class='type'>Float</span>, qw: <span class='type'>Float</span>): <span class='type'>this</span></h3>
+            <p>sets position and rotation to inputted values</p>
+        </div>
+</html>

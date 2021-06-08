@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vector2</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href='../style.css'>
+        <script src='../sidebar.js'></script>
+    </head>
+    <body>
+        <div class='sidebar'></div>
+        <div class='main'>
+                <h1> Vector2</h1>
+                <p>Defines a 2D vector. Can be used as a Vector with a direction and magnitude, can be used as a point, or can be used as an arbitrary set of 2 numbers</p>
+                <h2>Code Example</h2>
+                <p class='code'>
+                    <span class='var'>let</span> x = <span class='num'>0</span>;<br>
+                    <span class='var'>let</span> y = <span class='num'>0</span>;<br>
+                    <span class='var'>const</span> vec = <span class="var"> new </span> JS3DAmmo.<span class='mod'>Vector2</span>(x, y);
+                </p>
+                <h2>Constructor</h2>
+                <p>
+                    <h3 class='show'>Vector2(x: <span class='type'>Float</span>, y: <span class='type'>Float</span>);</h3><br>
+                    <span class='mod'>x</span> - x value of the vector<br>
+                    <span class='mod'>y</span> - y value of the vector<br>
+                </p>
+                <h2>Methods</h2>
+                    <h3 class='show'>add(a: <span class='type'>Vector2</span>): <span class='type'>this</span></h3>
+                    <p>Adds vector a to this vector</p>
+                    <h3 class='show'>addVectors(a: <span class='type'>Vector2</span>, b: <span class='type'>Vector2</span>): <span class='type'>this</span></h3>
+                    <p>Sets this vector to be the sum of a and b</p>
+                    <h3 class='show'>addScaledVector(v: <span class='type'>Vector2</span>, s: <span class='type'>Float</span>): <span class='type'>this</span></h3>
+                    <p>Scales vector v by s and then adds v to this vector</p>
+                    <h3 class='show'>clone():<span class='type'>Vector2</span></h3>
+                    <p>returns a new Vector2 exactly the same as this vector</p>
+                    <h3 class='show'>copy(v: <span class='type'>Vector2</span>): <span class='type'>this</span></h3>
+                    <p>sets this vector to be the inputted one. Does work with JS3DAmmo.Vector2, THREE.Vector2, and Ammo.btVector2</p>
+                    <h3 class='show'>directionTo(a: <span class='type'>Vector2</span>, b: <span class='type'>Vector2</span>): <span class='type'>this</span></h3>
+                    <p>sets this vector to be the normalized direction from a to b</p>
+                    <h3 class='show'>distanceTo(v: <span class='type'>Vector2</span>): <span class='type'>Float</span></h3>
+                    <p>returns the euclidean distance from this vector to vector v</p>
+                    <h3 class="show">distanceToSquared(v: <span class='type'>Vector2</span>): <span class='type'>Float</span></h3>
+                    <p>returns the euclidean distance squared (doesn't take square root at end). This is often easier to compute than the euclidean distance</p>
+                    <h3 class='show'>dot(v: <span class='type'>Vector2</span>): <span class='type'>Float</span></h3>
+                    <p>returns the dot product of this vector and vector v</p>
+                    <h3 class='show'>getComponent(index: <span class='type'>Integer</span>): <span class='type'>Float</span></h3>
+                    <p>gets a component of the vector: <br>
+                        x - index 0<br>
+                        y - index 1<br>
+                    </p>
+                    <h3 class='show'>invert(): <span class='type'>this</span></h3>
+                    <p>Inverts this vector, ie: x = -x, y = -y</p>
+                    <h3 class='show'>isAlmostEqualTo(v: <span class='type'>Vector2</span>, delta: <span class='type'>Number</span>): <span class='type'>Boolean</span></h3>
+                    <p>returns if this vector is different from the other vector by at most delta in each direction</p>
+                    <h3 class='show'>isEqualTo(v: <span class='type'>Vector2</span>): <span class='type'>Boolean</span></h3>
+                    <p>checks for strict equality between this vector and v</p>
+                    <h3 class='show'>length(): <span class='type'>Float</span></h3>
+                    <p>computes the euclidean length of this vector</p>
+                    <h3 class='show'>lengthSq():Float</h3>
+                    <p>computes the euclidean length squared of this vector. Often easier to compute than length()</p>
+                    <h3 class='show'>manhattanDistanceTo(v: <span class='type'>Vector2</span>): <span class='type'>Float</span></h3>
+                    <p>computes the manhattan distance from this vector to v</p>
+                    <h3 class='show'>manhattanLength(): <span class='type'>Float</span></h3>
+                    <p>computes the manhattan length of this vector</p>
+                    <h3 class='show'>multiplyScalar(s: <span class='type'>Float</span>): <span class='type'>this</span></h3>
+                    <p>multiplies each of this vectors components by s</p>
+                    <h3 class='show'>normalize(): <span class='type'>this</span></h3>
+                    <p>normalizes this vector, ie: makes the vector have the same direction, but length of 1</p>
+                    <h3 class='show'>set(x: <span class='type'>Float</span>, y: <span class='type'>Float</span>): <span class='type'>this</span></h3>
+                    <p> sets the components of this vector to the inputted x and y values</p>
+                    <h3 class='show'>setFromArray(array: <span class='type'>Array</span>, offset <span class='type'>Integer</span>): <span class='type'>this</span></h3>
+                    <p>sets this vectors components from the array, starting at offset</p>
+                    <h3 class='show'>setLength(length: <span class='type'>Float</span>): this</h3>
+                    <p>sets this vector to be one that has length length and the same direction as the original one</p>
+                    <h3 class='show'>setScalar(scalar: <span class='type'>Float</span>): this</h3>
+                    <p>sets each component of this vector to the scalar</p>
+                    <h3 class='show'>sub(v: <span class='type'>Vector2</span>): <span class='type'>this</span></h3>
+                    <p>subtracts vector v from this vector</p>
+                    <h3 class='show'>subVectors(a: <span class='type'>Vector2</span>, b: <span class='type'>Vector2</span>): <span class='type'>this</span></h3>
+                    <p>sets this vector to be a-b</p>
+                    <h3 class='show'>toString(): <span class='type'>String</span></h3>
+                    <p>returns a string: {x: (this vector x), y: (this vector y)}</p>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Quaternion</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href='../style.css'>
+        <script src='../sidebar.js'></script>
+    </head>
+    <body>
+        <div class='sidebar'></div>
+        <div class='main'>
+            <h1>Quaternion</h1>
+            <p>Defines a quaternion. Quaternions are used as rotations in both THREE.js and Ammo.js, and they avoid the problem of gimbal lock that euler angles have</p>
+            <h2>Code example</h2>
+            <p class='code'>
+                <span class='var'>let</span> x = <span class='num'>0</span>;<br>
+                <span class='var'>let</span> y = <span class='num'>0</span>;<br>
+                <span class='var'>let</span> z = <span class='num'>0</span>;<br>
+                <span class='var'>let</span> w = <span class='num'>1</span>;<br>
+                <span class='var'>const</span> quat = <span class='var'>new</span> JS3DAmmo.<span class='mod'>Quaternion</span>(x, y, z, w);
+            </p>
+            <h2>Constructor</h2>
+            <p>
+                <h3 class='show'>Quaternion(x: <span class='type'>Float</span>, y: <span class='type'>Float</span>, z: <span class='type'>Float</span>, w: <span class='type'>Float</span>);</h3><br>
+                <span class='mod'>x</span> - x value of the quaternion<br>
+                <span class='mod'>y</span> - y value of the quaternion<br>
+                <span class='mod'>z</span> - z value of the quaternion<br>
+                <span class='mod'>w</span> - w value of the quaternion<br>
+            </p>
+            <h2>Properties</h2>
+            <p>
+                <span class='mod'>_x</span> - x value of quaternion. Here for compatibility with three.js quaternion.<br>
+                <span class='mod'>_y</span> - y value of quaternion. Here for compatibility with three.js quaternion.<br>
+                <span class='mod'>_z</span> - z value of quaternion. Here for compatibility with three.js quaternion.<br>
+                <span class='mod'>_w</span> - w value of quaternion. Here for compatibility with three.js quaternion.<br>
+            </p>
+            <h2>Methods</h2>
+                <h3 class='show'>clone(): <span class='type'>Quaternion</span></h3>
+                <p>Clones this quaternion and returns the new one</p>
+                <h3 class='show'>conjugate(): <span class='type'>this</span></h3>
+                <p>calculates the conjugation for this quaternion</p>
+                <h3 class='show'>copy(q: <span class='type'>Quaternion</span>): <span class='type'>this</span></h3>
+                <p>copies quaternion q's values to this quaternion. workes with JS3DAmmo, THREE, and Ammo Quaternions</p>
+                <h3 class='show'>dot(q: <span class='type'>Quaternion</span>): <span class='type'>Float</span></h3>
+                <p>calculates the dot product of this quaternion and quaternion q</p>
+                <h3 class='show'>getAxisAngle(): <span class='type'>Object: {</span>axis: <span class='type'>Vector3</span>, angle: <span class='type'>Float}</span></h3>
+                <h3 class='show'>isAlmostEqualTo(q: <span class='type'>Quaternion</span>, delta: <span class='type'>Float</span>): <span class='type'>Boolean</span></h3>
+                <p>checks if this quaternion is equal to quaternion q within delta distance</p>
+                <h3 class='show'>isEqualTo(q: <span class='type'>Quaternion</span>): <span class='type'>Boolean</span></h3>
+                <p>checks for strict equality between this quaternion's values and quaternion q's values</p>
+                <p>gets the axis and angle around which this quaternion rotates</p>
+                <h3 class='show'>length(): <span class='type'>Float</span></h3>
+                <p>calculates the euclidean length of the quaternion</p>
+                <h3 class='show'>lengthSq(): <span class='type'>Float</span></h3>
+                <p>calculates the square of the euclidean length of the quaternion</p>
+                <h3 class='show'>normalize(): <span class='type'>this</span></h3>
+                <p>makes this quaternion be of unit length, but have same rotation as before</p>
+                <h3 class='show'>set(x: <span class='type'>Float</span>, y: <span class='type'>Float</span>, z: <span class='type'>Float</span>, w: <span class='type'>Float</span>): <span class='type'>this</span></h3>
+                <p>sets this quaternion's values to the inputted x, y, z, and w values</p>
+                <h3 class='show'>setFromArray(array: <span class='type'>Array</span>, offset: <span class='type'>Integer</span>): <span class='type'>this</span></h3>
+                <p>sets this vectors components from the array, starting at offset</p>
+                <h3 class='show'>setFromAxisAngle(axis: <span class='type'>Vector3</span>, angle: <span class='type'>Float</span>): <span class='type'>this</span></h3>
+                <p>sets this quaternion from the angle around the axis specified. assumes axis is normalized.</p>
+                <h3 class='show'>toString(): <span class='type'>String</span></h3>
+                <p>returns a string with this quaternion's values: '{x: (this x), y: (this y), z: (this z), w: (this w)}'</p>
+        </div>
+</html>

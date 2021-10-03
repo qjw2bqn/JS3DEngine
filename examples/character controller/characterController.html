@@ -49,10 +49,10 @@
         moveSpeed:10
       });
       document.onkeydown = function(){
-        characterController.moveDirUpdateSta(event.keyCode,87,83,65,68)
+        characterController.moveDirUpdateStart(event.keyCode,87,83,65,68)
       }
       document.onkeyup = function(){
-        characterController.moveDirUpdateSto(event.keyCode,87,83,65,68)
+        characterController.moveDirUpdateStop(event.keyCode,87,83,65,68)
       }
       world.characterController = characterController;
       animate();
